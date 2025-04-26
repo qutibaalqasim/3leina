@@ -14,6 +14,9 @@ const initApp = async (app , express)=>{
 
 
    
+    app.use((err,req,res,next)=>{
+        return res.status(err.statusCode).json({message:err.message});
+    });
 
 }
 
