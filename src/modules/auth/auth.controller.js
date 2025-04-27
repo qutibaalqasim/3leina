@@ -37,3 +37,26 @@ export const confirmEmail = async(req,res,next)=>{
     const user = await userModel.findOneAndUpdate({email: decoded.email}, {confirmEmail: true});
     return res.status(200).json({message: 'Email confirmed successfully'});
 }
+
+export const login = async (req, res, next) => {
+    const {email, password} = req.body;
+    const user = await userModel.findOne({email});
+    if(!user){
+        return next(new AppError('Invalid email', 404));
+    }
+
+    if(!user.confirmEmail){
+        return next(new AppError('Please confirm your email', 400));
+    }
+
+    if(user.status === 'inactive'){
+        return next(new AppError('Your account is Blocked', 400));
+    }
+
+    const checkPassword = bcrypt.compareSync(password, user.password);
+    if(!checkPassword){
+        return next(new AppError('Invalid password', 400));
+    }
+    const token = jwt.sign({id: user._id, userName: user.userName, email: user.email , role: user.role}, process.env.LOGIN_TOKEN);
+    return res.status(200).json({message: 'Login successfully', token});
+}
