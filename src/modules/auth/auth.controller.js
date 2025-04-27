@@ -75,3 +75,14 @@ export const sendCode = async (req, res, next) => {
     return res.status(200).json({message: 'success'});
 
 }
+
+export const resetPassword = async (req, res, next) => {
+    const {email, code, newPassword} = req.body;
+    const user = await userModel.findOneAndUpdate({email, sendCode: code}, {sendCode: null});
+    if(!user){
+        return next(new AppError('Invalid email or code', 404));
+    }
+    const hashedPassword = bcrypt.hashSync(newPassword, parseInt(process.env.SALT_ROUND));
+    await user.updateOne({password: hashedPassword});
+    return res.status(200).json({message: 'Password reset successfully'});
+}
