@@ -1,3 +1,4 @@
+import userModel from "../../DB/models/user.model.js";
 import { AppError } from "../utils/AppError.js";
 import jwt from 'jsonwebtoken';
 
