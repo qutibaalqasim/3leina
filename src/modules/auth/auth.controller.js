@@ -3,6 +3,8 @@ import { AppError } from "../../utils/AppError.js";
 import bcrypt from 'bcryptjs';
 import { sendEmail } from "../../utils/sendEmail.js";
 import jwt from 'jsonwebtoken';
+import { nanoid , customAlphabet  } from 'nanoid';
+
 
 export const register = async (req, res, next) => {
    const {userName, email , password} = req.body;
@@ -26,7 +28,6 @@ export const register = async (req, res, next) => {
    sendEmail(email, 'Welcome to 3leina stage', html);
     return res.status(201).json({message: 'user created successfully', newUser});
 }
-
 
 export const confirmEmail = async(req,res,next)=>{
     const {token} = req.params; 
@@ -59,4 +60,18 @@ export const login = async (req, res, next) => {
     }
     const token = jwt.sign({id: user._id, userName: user.userName, email: user.email , role: user.role}, process.env.LOGIN_TOKEN);
     return res.status(200).json({message: 'Login successfully', token});
+}
+
+export const sendCode = async (req, res, next) => {
+    const {email} = req.body;
+    const code = customAlphabet('1234567890abcdefABCDEF', 4)();
+    const user = await userModel.findOneAndUpdate({email}, {sendCode: code});
+    if(!user){
+        return next(new AppError('Invalid email', 404));
+    }
+    const html = `<h1>Reset password Code</h1>
+    <p>your code is ${code}</p>`;
+    await sendEmail(email, 'Reset password code', html);
+    return res.status(200).json({message: 'success'});
+
 }
