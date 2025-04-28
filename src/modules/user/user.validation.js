@@ -22,3 +22,8 @@ export const updateUserImageSchema = joi.object({
 export const deleteUserSchema = joi.object({
     id: joi.string().required(),
 });
+
+export const changeUserStatusSchema = joi.object({
+    id: joi.string().required(),
+    status: joi.string().valid('active', 'inactive').required(),
+});
