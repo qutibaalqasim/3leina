@@ -1,5 +1,17 @@
 import userModel from "../../../DB/models/user.model.js"
+import { AppError } from "../../utils/AppError.js";
 
+
+
+export const createDelivery = async(req,res,next)=>{
+    const {id} = req.params;
+    const {role} = req.body;
+    const user = await userModel.findByIdAndUpdate(id, {role}, {new: true});
+    if (!user) {
+        return next(new Error("User not found", { cause: 404 }));
+    }
+    return res.status(200).json({message:"success", user});
+}
 
 export const getAllDelivery = async (req, res,next) => {
     const delivery = await userModel.find({role: "delivery_Agent"});

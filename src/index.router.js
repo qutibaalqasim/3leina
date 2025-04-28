@@ -20,6 +20,7 @@ const initApp = async (app , express)=>{
     app.use('/users', userRouter);
     // url/delivery
     app.use('/delivery', deliveryRouter);
+
     app.use((err,req,res,next)=>{
         return res.status(err.statusCode).json({message:err.message});
     });
