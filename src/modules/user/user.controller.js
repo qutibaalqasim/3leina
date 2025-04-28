@@ -1,6 +1,7 @@
 import userModel from "../../../DB/models/user.model.js";
 import { AppError } from "../../utils/AppError.js";
-
+import cloudinary from "../../utils/cloudinary.js";
+import bcrypt from 'bcryptjs';
 
 
 export const getAllUsers = async (req, res, next) => {
@@ -47,9 +48,43 @@ export const updateUser = async (req,res,next)=>{
             return next(new AppError("this email is already taken", 400));
         }
     }
+    if(req.body.password){
+        const hashedPassword = bcrypt.hashSync(req.body.password, parseInt(process.env.SALT_ROUNDS));
+        req.body.password = hashedPassword;
+    }
     const user = await userModel.findByIdAndUpdate({_id:id},req.body,{new:true});
     if (!user) {
         return next(new Error("No user found", 404 ));
     }
     return res.status(200).json({ message: "success", user });
+}
+// this function is used to update user Image for all users .
+export const updateUserImage = async (req,res,next)=>{
+    const {id} = req.params;
+    if(req.id != id){
+        return next(new AppError("unothrized to update this user Image", 400));
+    }
+    const user = await userModel.findById(id);
+    if (!user) {
+        return next(new Error("No user found", 404 ));
+    }
+    if(!req.files){
+        return next(new AppError("please upload a file", 400));
+    }
+    const {secure_url, public_id} = await cloudinary.uploader.upload(req.files.userImage[0].path); 
+    if(!secure_url){
+        return next(new AppError("error in uploading the image", 400));
+    }
+    user.userImage = {secure_url , public_id};
+    await user.save();
+    return res.status(200).json({ message: "success", user });   
+}
+// this function is used to delete user for all users .
+export const deleteUser = async (req,res,next)=>{
+    const {id} = req.params;
+    const user = await userModel.findByIdAndDelete(id);
+    if (!user) {
+        return next(new Error("No user found", 404 ));
+    }
+    return res.status(200).json({ message: "success"});
 }

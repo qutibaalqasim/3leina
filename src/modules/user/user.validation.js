@@ -14,3 +14,11 @@ export const updateUserSchema = joi.object({
     phone: joi.string().min(10).max(15),
     address: joi.string().min(5).max(100),
 });
+
+export const updateUserImageSchema = joi.object({
+    id: joi.string().required(),
+});
+
+export const deleteUserSchema = joi.object({
+    id: joi.string().required(),
+});
