@@ -20,3 +20,16 @@ export const getAllDelivery = async (req, res,next) => {
     }
     return res.status(200).json({message:"success", delivery});
 }
+
+export const getActive = async (req,res,next)=>{
+    const delivery = await userModel.find({role: "delivery_Agent", status: "active"});
+    if (!delivery) {
+        return next(new Error("No active delivery agents found", { cause: 404 }));
+    }
+    return res.status(200).json({message:"success", delivery});
+}
+
+export const getDeliveryDetails = async (req,res,next)=>{
+    const {id} = req.params;
+    
+}
