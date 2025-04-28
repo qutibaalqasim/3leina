@@ -2,6 +2,7 @@ import cors from 'cors';
 import connectDb from '../DB/connection.js';
 import authRouter from './modules/auth/auth.router.js';
 import userRouter from './modules/user/user.router.js';
+import deliveryRouter from './modules/deliveryAgent/delivery.router.js';
 
 const initApp = async (app , express)=>{
     app.use(express.json());
@@ -13,11 +14,14 @@ const initApp = async (app , express)=>{
       return res.status(200).json({ message: "Welcome to 3leina stage"});
     });
 
+    // url/auth
     app.use('/auth', authRouter);
+    // url/users
     app.use('/users', userRouter);
-   
+    // url/delivery
+    app.use('/delivery', deliveryRouter);
     app.use((err,req,res,next)=>{
-        return res.status(500).json({message:err.message});
+        return res.status(err.statusCode).json({message:err.message});
     });
 
 }
