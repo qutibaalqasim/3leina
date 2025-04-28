@@ -31,5 +31,11 @@ export const getActive = async (req,res,next)=>{
 
 export const getDeliveryDetails = async (req,res,next)=>{
     const {id} = req.params;
-    
+    const delivery = await userModel.findById(id);
+    if (!delivery) {
+        return next(new Error("Delivery agent not found",  404 ));
+    }
+    return res.status(200).json({message:"success", delivery});
 }
+
+

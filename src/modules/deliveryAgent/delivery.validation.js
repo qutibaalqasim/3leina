@@ -7,4 +7,8 @@ export const createDeliverySchema = joi.object({
     role: joi.string().valid('delivery_Agent').required(),
 });
 
+export const getDeliveryDetailsSchema = joi.object({
+    id: joi.string().required(),
+});
+
 
