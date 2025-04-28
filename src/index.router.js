@@ -3,6 +3,7 @@ import connectDb from '../DB/connection.js';
 import authRouter from './modules/auth/auth.router.js';
 import userRouter from './modules/user/user.router.js';
 import deliveryRouter from './modules/deliveryAgent/delivery.router.js';
+import categoryRouter from './modules/category/category.router.js';
 
 const initApp = async (app , express)=>{
     app.use(express.json());
@@ -20,7 +21,8 @@ const initApp = async (app , express)=>{
     app.use('/users', userRouter);
     // url/delivery
     app.use('/delivery', deliveryRouter);
-
+    // url/category
+    app.use('/category', categoryRouter);
     app.use((err,req,res,next)=>{
         return res.status(err.statusCode).json({message:err.message});
     });

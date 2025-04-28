@@ -1,4 +1,4 @@
-import { Schema, Types } from "mongoose";
+import mongoose, { Schema, Types,model } from "mongoose";
 
 
 const categorySchema = new Schema({

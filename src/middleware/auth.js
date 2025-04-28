@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 
 
 export const auth = (accessRules = [])=>{
+    try{
     return async(req, res, next)=>{
         const {token} = req.headers;
         if(!token){
@@ -26,4 +27,7 @@ export const auth = (accessRules = [])=>{
         req.id = decoded.id;
         next();
     }
+}catch(error){
+    return next(new AppError(error.message, 400));
+}
 }
