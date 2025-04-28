@@ -17,7 +17,7 @@ const initApp = async (app , express)=>{
     app.use('/users', userRouter);
    
     app.use((err,req,res,next)=>{
-        return res.status(err.statusCode).json({message:err.message});
+        return res.status(500).json({message:err.message});
     });
 
 }

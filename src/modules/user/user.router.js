@@ -11,6 +11,7 @@ const router = Router();
 router.get('/' ,auth(['super_Admin']), asyncHandler(controller.getAllUsers));
 router.get('/active' ,auth(['super_Admin']), asyncHandler(controller.getActiveUsers));
 router.get('/:id' ,auth(['super_Admin']),validation(schema.getUserDetailsSchema), asyncHandler(controller.getUserDetails));
+router.put('/:id',auth(['super_Admin','admin', 'delivery_Agent' , 'user']),validation(schema.updateUserSchema), asyncHandler(controller.updateUser));
 
 
 
