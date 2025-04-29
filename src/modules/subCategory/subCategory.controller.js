@@ -2,6 +2,7 @@ import slugify from "slugify";
 import categoryModel from "../../../DB/models/category.model.js";
 import { AppError } from "../../utils/AppError.js";
 import subCategoryModel from "../../../DB/models/subCategory.model.js";
+import cloudinary from "../../utils/cloudinary.js";
 
 
 
@@ -116,4 +117,29 @@ export const updateSubCategory = async (req, res, next) => {
         return next(new AppError('Failed to update subCategory', 400));
     }
     return res.status(200).json({ message: 'success', updatedSubCategory });
+}
+
+export const updateImage = async (req, res, next) => {
+    const {subCategoryId} = req.params;
+    const subCategory = await subCategoryModel.findById(subCategoryId);
+    if(!subCategory) {
+        return next(new AppError('SubCategory not found', 404));
+    }
+    const category = await categoryModel.findById(subCategory.categoryId);
+    if(!category){
+        return next(new AppError('Category not found', 404));
+    }
+    if(!category.admins.includes(req.id) && req.role != 'super_Admin'){
+        return next(new AppError('You are not authorized to update subCategory on this category',403));
+    }
+     if(!req.files){
+                return next(new AppError("please upload a image", 400));
+            }
+            const {secure_url, public_id} = await cloudinary.uploader.upload(req.files.image[0].path); 
+            if(!secure_url){
+                return next(new AppError("error in uploading the image", 400));
+            }
+            subCategory.image = {secure_url , public_id};
+            await subCategory.save(); 
+            return res.status(200).json({message: 'success', category});
 }

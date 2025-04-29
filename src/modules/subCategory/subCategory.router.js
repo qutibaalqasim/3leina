@@ -4,6 +4,7 @@ import * as schema from './subCategory.validation.js';
 import { asyncHandler } from "../../utils/catchError.js";
 import { auth } from "../../middleware/auth.js";
 import validation from "../../middleware/validation.js";
+import fileUpload, { fileValidation } from "../../utils/multer.js";
 
 
 const router = Router();
@@ -25,4 +26,8 @@ router.get('/:categoryId', auth(['super_Admin', 'admin']), validation(schema.get
 router.patch('/:subCategoryId', auth(['super_Admin', 'admin']), validation(schema.changeStatusSchema), asyncHandler(controller.changeStatus));
 // url/subCategory/update/:subCategoryId
 router.put('/update/:subCategoryId', auth(['super_Admin', 'admin']), validation(schema.updateSubCategorySchema), asyncHandler(controller.updateSubCategory));
+// url/subCategory/image/:subCategoryId
+router.patch('/image/:subCategoryId', auth(['super_Admin', 'admin']),fileUpload(fileValidation.image).fields([
+    {name:"image" , maxCount:1}
+]) ,validation(schema.updateImageSchema), asyncHandler(controller.updateImage));
 export default router;

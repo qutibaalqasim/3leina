@@ -29,3 +29,7 @@ export const updateSubCategorySchema = joi.object({
     description: joi.string().min(5),
     subCategoryId: joi.string().required(),
 });
+
+export const updateImageSchema = joi.object({
+    subCategoryId: joi.string().required(),
+});
