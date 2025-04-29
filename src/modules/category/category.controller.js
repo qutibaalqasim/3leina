@@ -13,3 +13,7 @@ export const createCategory = async (req, res, next) => {
     }
     return res.status(201).json({message: 'Category created successfully', category});
 }
+
+export const getAllCategories = async(req,res,next)=>{
+
+}

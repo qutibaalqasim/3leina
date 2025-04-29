@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs';
 export const getAllUsers = async (req, res, next) => {
     const users = await userModel.find({role: 'user'});
     if (!users) {
-        return next(new Error("No users found", 404 ));
+        return next(new AppError("No users found", 404 ));
     }
     return res.status(200).json({ message: "success", users });
 }
@@ -15,7 +15,7 @@ export const getAllUsers = async (req, res, next) => {
 export const getActiveUsers = async (req, res, next) => {
     const users = await userModel.find({role: 'user', status: 'active'});
     if (!users) {
-        return next(new Error("No users found", 404 ));
+        return next(new AppError("No users found", 404 ));
     }
     return res.status(200).json({ message: "success", users });
 }
@@ -24,7 +24,7 @@ export const getUserDetails = async (req, res, next) => {
     const { id } = req.params;
     const user = await userModel.findById(id);
     if (!user) {
-        return next(new Error("No user found", 404 ));
+        return next(new AppError("No user found", 404 ));
     }
     return res.status(200).json({ message: "success", user });
 }
@@ -35,7 +35,7 @@ export const changeUserStatus = async (req, res, next) => {
     const {status} = req.body;
     const user = await userModel.findByIdAndUpdate(id, {status}, {new: true});
     if (!user) {
-        return next(new Error("No user found", 404 ));
+        return next(new AppError("No user found", 404 ));
     }
     return res.status(200).json({ message: "success", user });
 }
@@ -64,7 +64,7 @@ export const updateUser = async (req,res,next)=>{
     }
     const user = await userModel.findByIdAndUpdate({_id:id},req.body,{new:true});
     if (!user) {
-        return next(new Error("No user found", 404 ));
+        return next(new AppError("No user found", 404 ));
     }
     return res.status(200).json({ message: "success", user });
 }
@@ -76,7 +76,7 @@ export const updateUserImage = async (req,res,next)=>{
     }
     const user = await userModel.findById(id);
     if (!user) {
-        return next(new Error("No user found", 404 ));
+        return next(new AppError("No user found", 404 ));
     }
     if(!req.files){
         return next(new AppError("please upload a file", 400));
@@ -94,7 +94,7 @@ export const deleteUser = async (req,res,next)=>{
     const {id} = req.params;
     const user = await userModel.findByIdAndDelete(id);
     if (!user) {
-        return next(new Error("No user found", 404 ));
+        return next(new AppError("No user found", 404 ));
     }
     return res.status(200).json({ message: "success"});
 }

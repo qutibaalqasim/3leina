@@ -3,11 +3,12 @@ import * as controller from './category.controller.js';
 import * as schema from './category.validation.js';
 import { auth } from "../../middleware/auth.js";
 import { asyncHandler } from "../../utils/catchError.js";
+import validation from "../../middleware/validation.js";
 
 
 const router = Router();
-
-router.post('/', auth(['admin', 'super_Admin']), asyncHandler(controller.createCategory));
+// url/category
+router.post('/', auth(['admin', 'super_Admin']),validation(schema.createCategorySchema), asyncHandler(controller.createCategory));
 
 
 
