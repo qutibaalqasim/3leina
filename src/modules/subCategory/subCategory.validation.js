@@ -10,3 +10,11 @@ export const createSubCategorySchema = joi.object({
 export const getSubCategoriesByCategoryIdSchema = joi.object({
     categoryId: joi.string().required(),
 });
+
+export const getAllActiveByCategoryIdSchema = joi.object({
+    categoryId: joi.string().required(),
+});
+
+export const getAllInActiveByCategoryIdSchema = joi.object({
+    categoryId: joi.string().required(),
+});

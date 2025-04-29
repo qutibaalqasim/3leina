@@ -15,6 +15,10 @@ router.get('/', auth(['super_Admin']), asyncHandler(controller.getAllSubCategory
 router.get('/active', auth(['super_Admin']), asyncHandler(controller.getAllActive));
 // url/subCategory/inactive
 router.get('/inactive', auth(['super_Admin']), asyncHandler(controller.getAllInactive));
+// url/subCategory/active/:categoryId
+router.get('/active/:categoryId', auth(['super_Admin', 'admin']), validation(schema.getAllActiveByCategoryIdSchema), asyncHandler(controller.getAllActiveByCategoryId));
+// url/subCategory/inactive/:categoryId
+router.get('/inactive/:categoryId', auth(['super_Admin']), validation(schema.getAllInActiveByCategoryIdSchema), asyncHandler(controller.getAllInActiveByCategoryId));
 // url/subCategory/:categoryId
 router.get('/:categoryId', auth(['super_Admin', 'admin']), validation(schema.getSubCategoriesByCategoryIdSchema), asyncHandler(controller.getSubCategoriesByCategoryId));
 
