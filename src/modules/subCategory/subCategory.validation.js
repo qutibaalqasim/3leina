@@ -18,3 +18,8 @@ export const getAllActiveByCategoryIdSchema = joi.object({
 export const getAllInActiveByCategoryIdSchema = joi.object({
     categoryId: joi.string().required(),
 });
+
+export const changeStatusSchema = joi.object({
+    status: joi.string().valid('active', 'inactive').required(),
+    subCategoryId: joi.string().required(),
+});

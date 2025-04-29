@@ -75,3 +75,23 @@ export const getAllInActiveByCategoryId = async (req, res, next) => {
     const subCategories = await subCategoryModel.find({categoryId, status: 'inactive'});
     return res.status(200).json({ message: 'success', subCategories });
 }
+
+export const changeStatus = async (req, res, next) => {
+    const { subCategoryId } = req.params;
+    const { status } = req.body;
+    const subCategory = await subCategoryModel.findById(subCategoryId);
+    if(!subCategory) {
+        return next(new AppError('SubCategory not found', 404));
+    }
+    const category = await categoryModel.findById(subCategory.categoryId);
+    if(!category){
+        return next(new AppError('Category not found', 404));
+    }
+    if(!category.admins.includes(req.id) && req.role != 'super_Admin'){
+        return next(new AppError('You are not authorized to change status subCategory on this category',403));
+    }
+    subCategory.status = status;
+    subCategory.updatedBy = req.id;
+    await subCategory.save();
+    return res.status(200).json({ message: 'success', subCategory });
+}
