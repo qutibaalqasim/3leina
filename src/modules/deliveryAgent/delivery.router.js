@@ -13,6 +13,8 @@ router.patch('/:id', auth(['super_Admin']), validation(schema.createDeliverySche
 router.get('/', auth(['super_Admin']), asyncHandler(controller.getAllDelivery));
 // url/delivery/active
 router.get('/active', auth(['super_Admin']), asyncHandler(controller.getActive));
+// url/delivery/inactive
+router.get('/inactive', auth(['super_Admin']), asyncHandler(controller.getInactive));
 // url/delivery/:id
 router.get('/:id', auth(['super_Admin']), validation(schema.getDeliveryDetailsSchema), asyncHandler(controller.getDeliveryDetails));
 
