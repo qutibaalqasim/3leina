@@ -13,5 +13,7 @@ router.post('/', auth(['admin', 'super_Admin']),validation(schema.createCategory
 router.get('/', auth(['super_Admin']), asyncHandler(controller.getAllCategories));
 // url/category/active
 router.get('/active', auth(['super_Admin']), asyncHandler(controller.getActive));
+// url/category/inactive
+router.get('/inactive', auth(['super_Admin']), asyncHandler(controller.getInactive));
 
 export default router;

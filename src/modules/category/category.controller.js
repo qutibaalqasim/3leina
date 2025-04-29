@@ -29,3 +29,11 @@ export const getActive = async (req,res,next)=>{
     }
     return res.status(200).json({message: 'success', categories});
 }
+
+export const getInactive = async (req,res,next)=>{
+    const categories = await categoryModel.find({status: 'inactive'});
+    if (!categories) {
+        return next(new AppError('Failed to get categories',404));
+    }
+    return res.status(200).json({message: 'success', categories});
+}
