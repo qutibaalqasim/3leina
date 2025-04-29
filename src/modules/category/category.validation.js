@@ -9,3 +9,8 @@ export const createCategorySchema = joi.object({
 export const getCategoryDetailsSchema = joi.object({
     id: joi.string().required(),
 });
+
+export const changeStatusSchema = joi.object({
+    id: joi.string().required(),
+    status: joi.string().valid('active', 'inactive').required(),
+});

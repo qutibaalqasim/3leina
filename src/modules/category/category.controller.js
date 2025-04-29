@@ -49,3 +49,13 @@ export const getCategoryDetails = async (req,res,next)=>{
     }
     return res.status(200).json({message: 'success', category});
 }
+
+export const changeStatus = async (req,res,next)=>{
+    const {id} = req.params;
+    const {status} = req.body;
+    const category = await categoryModel.findByIdAndUpdate(id,{status},{new: true});
+    if (!category) {
+        return next(new AppError('Failed to update category',404));
+    }
+    return res.status(200).json({message: 'Category updated successfully', category});
+}
