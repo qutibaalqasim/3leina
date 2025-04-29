@@ -13,6 +13,12 @@ const router = Router();
 router.put('/:categoryId',auth(['super_Admin']), validation(schema.createAdminSchema), asyncHandler(controller.createAdmin)); 
 // url/admin
 router.get('/', auth(['super_Admin']), asyncHandler(controller.getAllAdmins));
+// url/admin/active
+router.get('/active', auth(['super_Admin']), asyncHandler(controller.getActive));
+// url/admin/inactive
+router.get('/inactive', auth(['super_Admin']), asyncHandler(controller.getInactive));
+// url/admin/:adminId
+router.get('/:adminId', auth(['super_Admin']), validation(schema.getAdminDetailsSchema), asyncHandler(controller.getAdminDetails));
 
 
 export default router;

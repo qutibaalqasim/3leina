@@ -6,3 +6,8 @@ export const createAdminSchema = joi.object({
     userId: joi.string().required(),
     role: joi.string().valid('admin').required(),
 });
+
+
+export const getAdminDetailsSchema = joi.object({
+    adminId: joi.string().required(),
+});
