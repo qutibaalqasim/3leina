@@ -6,6 +6,7 @@ import deliveryRouter from './modules/deliveryAgent/delivery.router.js';
 import categoryRouter from './modules/category/category.router.js';
 import adminRouter from './modules/admin/admin.router.js';
 import subCategoryRouter from './modules/subCategory/subCategory.router.js';
+import productRouter from './modules/product/product.router.js';
 
 const initApp = async (app , express)=>{
     app.use(express.json());
@@ -29,6 +30,8 @@ const initApp = async (app , express)=>{
     app.use('/category', categoryRouter);
     // url/subCategory
     app.use('/subCategory', subCategoryRouter);
+    // url/product
+    app.use('/product', productRouter);
     app.use((err,req,res,next)=>{
         return res.status(err.statusCode).json({message:err.message});
     });

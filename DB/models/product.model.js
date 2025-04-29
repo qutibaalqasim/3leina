@@ -32,6 +32,16 @@ const productSchema = new Schema({
         type: Number,
         default: 0,
     },
+    priceAfterDiscount:{
+        type: Number,
+    },
+    colors:[String],
+    sizes:[
+        {
+            type: [String],
+            enum:['sm', 'md' , 'lg' , 'xlg' , '2xlg' , '3xlg'],
+        }
+    ],
     mainImage:{
         type: Object,
         required: true,
