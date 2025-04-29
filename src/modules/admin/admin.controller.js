@@ -17,3 +17,11 @@ export const createAdmin = async (req, res, next) => {
     }
     return res.status(201).json({message: 'Admin created successfully', admin, category});
 }
+
+export const getAllAdmins = async (req, res, next) => {
+    const admins = await userModel.find({role: 'admin'});
+    if (!admins) {
+        return next(new AppError('Failed to get admins', 404));
+    }
+    return res.status(200).json({message: 'success', admins});
+}

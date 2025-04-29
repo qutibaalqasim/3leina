@@ -11,7 +11,8 @@ const router = Router();
 
 // url/admin
 router.put('/:categoryId',auth(['super_Admin']), validation(schema.createAdminSchema), asyncHandler(controller.createAdmin)); 
-
+// url/admin
+router.get('/', auth(['super_Admin']), asyncHandler(controller.getAllAdmins));
 
 
 export default router;
