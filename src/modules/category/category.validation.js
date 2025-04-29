@@ -14,3 +14,9 @@ export const changeStatusSchema = joi.object({
     id: joi.string().required(),
     status: joi.string().valid('active', 'inactive').required(),
 });
+
+export const updateCategorySchema = joi.object({
+    id: joi.string().required(),
+    name: joi.string().min(3).required(),
+    description: joi.string().min(5).optional(),
+});

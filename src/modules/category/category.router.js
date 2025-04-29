@@ -19,5 +19,7 @@ router.get('/inactive', auth(['super_Admin']), asyncHandler(controller.getInacti
 router.get('/:id', auth(['super_Admin', 'admin']), validation(schema.getCategoryDetailsSchema), asyncHandler(controller.getCategoryDetails));
 // url/category/:id/status
 router.patch('/:id/status', auth(['super_Admin']), validation(schema.changeStatusSchema), asyncHandler(controller.changeStatus));
+// url/category/:id
+router.put('/:id', auth(['super_Admin', 'admin']), validation(schema.updateCategorySchema), asyncHandler(controller.updateCategory));
 
 export default router;
