@@ -4,6 +4,7 @@ import authRouter from './modules/auth/auth.router.js';
 import userRouter from './modules/user/user.router.js';
 import deliveryRouter from './modules/deliveryAgent/delivery.router.js';
 import categoryRouter from './modules/category/category.router.js';
+import adminRouter from './modules/admin/admin.router.js';
 
 const initApp = async (app , express)=>{
     app.use(express.json());
@@ -21,6 +22,8 @@ const initApp = async (app , express)=>{
     app.use('/users', userRouter);
     // url/delivery
     app.use('/delivery', deliveryRouter);
+    // url/admin
+    app.use('/admin', adminRouter);
     // url/category
     app.use('/category', categoryRouter);
     app.use((err,req,res,next)=>{
