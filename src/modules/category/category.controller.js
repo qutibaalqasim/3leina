@@ -106,3 +106,13 @@ export const updateImage = async (req,res,next)=>{
         await category.save(); 
         return res.status(200).json({message: 'Category image updated successfully', category});
 }
+
+/*export const deleteCategory = async (req,res,next)=>{
+    const {id} = req.params;
+    const category = await categoryModel.findById(id);
+    if(!category){
+        return next(new AppError('Category not found',404));
+    }
+    await categoryModel.findByIdAndDelete(id);
+    return res.status(200).json({message: 'Category deleted successfully'});
+}*/
