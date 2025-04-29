@@ -12,6 +12,8 @@ const router = Router();
 router.get('/' ,auth(['super_Admin']), asyncHandler(controller.getAllUsers));
 // url/users/active
 router.get('/active' ,auth(['super_Admin']), asyncHandler(controller.getActiveUsers));
+// url/users/inactive
+router.get('/inactive' ,auth(['super_Admin']), asyncHandler(controller.getInactiveUsers));
 // url/users/:id
 router.get('/:id' ,auth(['super_Admin']),validation(schema.getUserDetailsSchema), asyncHandler(controller.getUserDetails));
 // url/users/status/:id
