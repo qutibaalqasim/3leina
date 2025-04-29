@@ -23,4 +23,6 @@ router.get('/inactive/:categoryId', auth(['super_Admin']), validation(schema.get
 router.get('/:categoryId', auth(['super_Admin', 'admin']), validation(schema.getSubCategoriesByCategoryIdSchema), asyncHandler(controller.getSubCategoriesByCategoryId));
 // url/subCategory/:subCategoryId
 router.patch('/:subCategoryId', auth(['super_Admin', 'admin']), validation(schema.changeStatusSchema), asyncHandler(controller.changeStatus));
+// url/subCategory/update/:subCategoryId
+router.put('/update/:subCategoryId', auth(['super_Admin', 'admin']), validation(schema.updateSubCategorySchema), asyncHandler(controller.updateSubCategory));
 export default router;
