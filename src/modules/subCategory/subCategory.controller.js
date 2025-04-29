@@ -46,3 +46,13 @@ export const getSubCategoriesByCategoryId = async (req, res, next) => {
     }
     return res.status(200).json({ message: 'success', subCategories });
 }
+
+export const getAllActive = async (req, res, next) => {
+    const subCategories = await subCategoryModel.find({status: 'active'}).populate('categoryId');
+    return res.status(200).json({ message: 'success', subCategories });
+}
+
+export const getAllInactive = async (req, res, next) => {
+    const subCategories = await subCategoryModel.find({status: 'inactive'});
+    return res.status(200).json({ message: 'success', subCategories });
+}   

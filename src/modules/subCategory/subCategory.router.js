@@ -11,6 +11,10 @@ const router = Router();
 router.post('/:categoryId',auth(['super_Admin', 'admin']),validation(schema.createSubCategorySchema), asyncHandler(controller.createSubCategory));
 // url/subCategory
 router.get('/', auth(['super_Admin']), asyncHandler(controller.getAllSubCategory));
+// url/subCategory/active
+router.get('/active', auth(['super_Admin']), asyncHandler(controller.getAllActive));
+// url/subCategory/inactive
+router.get('/inactive', auth(['super_Admin']), asyncHandler(controller.getAllInactive));
 // url/subCategory/:categoryId
 router.get('/:categoryId', auth(['super_Admin', 'admin']), validation(schema.getSubCategoriesByCategoryIdSchema), asyncHandler(controller.getSubCategoriesByCategoryId));
 
