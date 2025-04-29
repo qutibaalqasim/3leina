@@ -22,3 +22,27 @@ export const createSubCategory = async (req, res, next) => {
     }
     return res.status(201).json({message: 'SubCategory created successfully', subCategory});
 }
+
+export const getAllSubCategory = async (req, res, next) => {
+    const subCategories = await subCategoryModel.find({});
+    if (!subCategories) {
+        return next(new AppError('Failed to get subCategories', 404));
+    }
+    return res.status(200).json({ message: 'success', subCategories });
+}
+
+export const getSubCategoriesByCategoryId = async (req, res, next) => {
+    const {categoryId} = req.params;
+    const category = await categoryModel.findById(categoryId);
+    if(!category){
+        return next(new AppError('Category not found', 404));
+    }
+    if(!category.admins.includes(req.id) && req.role != 'super_Admin'){
+        return next(new AppError('You are not authorized to create subCategory on this category',403));
+    }
+    const subCategories = await subCategoryModel.find({categoryId});
+    if (!subCategories) {
+        return next(new AppError('Failed to get subCategories', 404));
+    }
+    return res.status(200).json({ message: 'success', subCategories });
+}

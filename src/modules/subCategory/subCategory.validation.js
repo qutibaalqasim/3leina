@@ -6,3 +6,7 @@ export const createSubCategorySchema = joi.object({
     name: joi.string().required().min(3),
     description: joi.string().min(5),
 });
+
+export const getSubCategoriesByCategoryIdSchema = joi.object({
+    categoryId: joi.string().required(),
+});
