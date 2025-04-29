@@ -32,6 +32,10 @@ const categorySchema = new Schema({
         type: Types.ObjectId,
         ref: 'User',
     },
+    admins:{
+        type: [Types.ObjectId],
+        ref: 'User',
+    },
 }, { timestamps: true });
 
 
