@@ -37,3 +37,15 @@ export const getInactive = async (req,res,next)=>{
     }
     return res.status(200).json({message: 'success', categories});
 }
+
+export const getCategoryDetails = async (req,res,next)=>{
+    const {id} = req.params;
+    const category = await categoryModel.findById(id);
+    if(!category.admins.includes(req.id) && req.role != 'super_Admin'){
+        return next(new AppError('You are not authorized to access this category',403));
+    }
+    if (!category) {
+        return next(new AppError('Failed to get category',404));
+    }
+    return res.status(200).json({message: 'success', category});
+}

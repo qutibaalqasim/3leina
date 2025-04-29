@@ -15,5 +15,7 @@ router.get('/', auth(['super_Admin']), asyncHandler(controller.getAllCategories)
 router.get('/active', auth(['super_Admin']), asyncHandler(controller.getActive));
 // url/category/inactive
 router.get('/inactive', auth(['super_Admin']), asyncHandler(controller.getInactive));
+// url/category/:id
+router.get('/:id', auth(['super_Admin', 'admin']), validation(schema.getCategoryDetailsSchema), asyncHandler(controller.getCategoryDetails));
 
 export default router;
