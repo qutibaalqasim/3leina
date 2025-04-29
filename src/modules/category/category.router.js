@@ -9,7 +9,8 @@ import validation from "../../middleware/validation.js";
 const router = Router();
 // url/category
 router.post('/', auth(['admin', 'super_Admin']),validation(schema.createCategorySchema), asyncHandler(controller.createCategory));
-
+// url/category
+router.get('/', auth(['admin', 'super_Admin']), asyncHandler(controller.getAllCategories));
 
 
 export default router;

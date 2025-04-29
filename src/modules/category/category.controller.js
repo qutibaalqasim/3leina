@@ -15,5 +15,9 @@ export const createCategory = async (req, res, next) => {
 }
 
 export const getAllCategories = async(req,res,next)=>{
-
+    const categories = await categoryModel.find({});
+    if (!categories) {
+        return next(new AppError('Failed to get categories',404));
+    }
+    return res.status(200).json({message: 'success', categories});
 }
