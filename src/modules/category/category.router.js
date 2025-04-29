@@ -4,7 +4,7 @@ import * as schema from './category.validation.js';
 import { auth } from "../../middleware/auth.js";
 import { asyncHandler } from "../../utils/catchError.js";
 import validation from "../../middleware/validation.js";
-
+import fileUpload, { fileValidation } from "../../utils/multer.js";
 
 const router = Router();
 // url/category
@@ -21,5 +21,9 @@ router.get('/:id', auth(['super_Admin', 'admin']), validation(schema.getCategory
 router.patch('/:id/status', auth(['super_Admin']), validation(schema.changeStatusSchema), asyncHandler(controller.changeStatus));
 // url/category/:id
 router.put('/:id', auth(['super_Admin', 'admin']), validation(schema.updateCategorySchema), asyncHandler(controller.updateCategory));
+// url/category/:id/image
+router.put('/:id/image', auth(['super_Admin', 'admin']), fileUpload(fileValidation.image).fields([
+    {name:"image" , maxCount:1}
+]) , validation(schema.updateImageSchema), asyncHandler(controller.updateImage));
 
 export default router;
