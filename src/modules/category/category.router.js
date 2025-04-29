@@ -10,7 +10,8 @@ const router = Router();
 // url/category
 router.post('/', auth(['admin', 'super_Admin']),validation(schema.createCategorySchema), asyncHandler(controller.createCategory));
 // url/category
-router.get('/', auth(['admin', 'super_Admin']), asyncHandler(controller.getAllCategories));
-
+router.get('/', auth(['super_Admin']), asyncHandler(controller.getAllCategories));
+// url/category/active
+router.get('/active', auth(['super_Admin']), asyncHandler(controller.getActive));
 
 export default router;
