@@ -56,6 +56,7 @@ export const getAllInActive = async (req,res,next)=>{
     return res.status(200).json({message: "success", products});
 }
 
+// get all products by subCategoryId and status active for all users
 export const getActiveBySubCategoryId = async (req,res,next)=>{
     const {subCategoryId} = req.params;
     const products = await productModel.find({status: "active", subCategoryId});
@@ -74,4 +75,13 @@ export const getInActiveBySubCategoryId = async (req,res,next)=>{
 
     const products = await productModel.find({status: "inactive", subCategoryId}).select('name description status stock mainImage');
     return res.status(200).json({message: "success", products});
+}
+
+export const getProductDetails = async (req,res,next)=>{
+    const {productId} = req.params;
+    const product = await productModel.findById(productId);
+    if(!product){
+        return next(new AppError("Product not found", 404));
+    }
+    return res.status(200).json({message: "success", product});
 }

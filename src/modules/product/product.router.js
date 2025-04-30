@@ -23,6 +23,7 @@ router.get('/inActive',auth(['super_Admin']),asyncHandler(controller.getAllInAct
 router.get('/active/:subCategoryId',auth(['super_Admin','admin','delivery_Agent' , 'user']),validation(schema.getActiveBySubCategoryIdSchema),asyncHandler(controller.getActiveBySubCategoryId));
 //url/product/inActive/:subCategoryId
 router.get('/inActive/:subCategoryId',auth(['super_Admin','admin']),validation(schema.getInActiveBySubCategoryIdSchema),asyncHandler(controller.getInActiveBySubCategoryId));
-
+// url/product/:productId
+router.get('/:productId',auth(['super_Admin','admin','delivery_Agent' , 'user']),validation(schema.getProductDetailsSchema),asyncHandler(controller.getProductDetails));
 
 export default router;

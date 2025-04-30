@@ -21,3 +21,7 @@ export const getActiveBySubCategoryIdSchema = joi.object({
 export const getInActiveBySubCategoryIdSchema = joi.object({
     subCategoryId: joi.string().required(),
 });
+
+export const getProductDetailsSchema = joi.object({
+    productId: joi.string().required(),
+});
