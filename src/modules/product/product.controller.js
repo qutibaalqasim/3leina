@@ -40,3 +40,38 @@ export const createProduct = async (req, res, next) => {
     }
     return res.status(201).json({message: "Product created successfully", product});
 }
+
+export const getAllProducts = async (req,res,next)=>{
+    const products = await productModel.find({}).select('name description status stock mainImage');
+    return res.status(200).json({message: "success", products});
+}
+
+export const getAllActive = async (req,res,next)=>{
+    const products = await productModel.find({status: "active"}).select('name description status stock mainImage');
+    return res.status(200).json({message: "success", products});
+}
+
+export const getAllInActive = async (req,res,next)=>{
+    const products = await productModel.find({status: "inactive"}).select('name description status stock mainImage');
+    return res.status(200).json({message: "success", products});
+}
+
+export const getActiveBySubCategoryId = async (req,res,next)=>{
+    const {subCategoryId} = req.params;
+    const products = await productModel.find({status: "active", subCategoryId});
+    return res.status(200).json({message: "success", products});
+}
+
+export const getInActiveBySubCategoryId = async (req,res,next)=>{
+    const {subCategoryId} = req.params;
+    const subCategory = await subCategoryModel.findById(subCategoryId).populate("categoryId");
+    if(!subCategory){
+        return next(new AppError("SubCategory not found", 404));
+    }
+    if(!subCategory.categoryId.admins.includes(req.id) && req.role != 'super_Admin'){
+        return next(new AppError('You are not authorized to access this category',403));
+    }
+
+    const products = await productModel.find({status: "inactive", subCategoryId}).select('name description status stock mainImage');
+    return res.status(200).json({message: "success", products});
+}

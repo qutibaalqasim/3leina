@@ -13,3 +13,11 @@ export const createProductSchema = joi.object({
     sizes: joi.array().items(joi.string().valid('sm', 'md', 'lg', 'xlg', '2xlg', '3xlg')),
     subCategoryId: joi.string().required(),
 });
+
+export const getActiveBySubCategoryIdSchema = joi.object({
+    subCategoryId: joi.string().required(),
+});
+
+export const getInActiveBySubCategoryIdSchema = joi.object({
+    subCategoryId: joi.string().required(),
+});

@@ -13,8 +13,16 @@ router.post('/',auth(['super_Admin','admin', 'delivery_Agent' , 'user']),fileUpl
     {name: "mainImage" , maxCount: 1},
     {name: "subImages" , maxCount: 5}
 ]),validation(schema.createProductSchema), asyncHandler(controller.createProduct));
-
-
+//url/product
+router.get('/',auth(['super_Admin']),asyncHandler(controller.getAllProducts));
+//url/product/active
+router.get('/active',auth(['super_Admin']),asyncHandler(controller.getAllActive));
+//url/product/inActive
+router.get('/inActive',auth(['super_Admin']),asyncHandler(controller.getAllInActive));
+//url/product/active/:subCategoryId
+router.get('/active/:subCategoryId',auth(['super_Admin','admin','delivery_Agent' , 'user']),validation(schema.getActiveBySubCategoryIdSchema),asyncHandler(controller.getActiveBySubCategoryId));
+//url/product/inActive/:subCategoryId
+router.get('/inActive/:subCategoryId',auth(['super_Admin','admin']),validation(schema.getInActiveBySubCategoryIdSchema),asyncHandler(controller.getInActiveBySubCategoryId));
 
 
 export default router;
