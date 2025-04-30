@@ -25,3 +25,8 @@ export const getInActiveBySubCategoryIdSchema = joi.object({
 export const getProductDetailsSchema = joi.object({
     productId: joi.string().required(),
 });
+
+export const changeStatusSchema = joi.object({
+    productId: joi.string().required(),
+    status: joi.string().valid('active', 'inactive').required(),
+});

@@ -3,6 +3,7 @@ import subCategoryModel from "../../../DB/models/subCategory.model.js";
 import { AppError } from "../../utils/AppError.js";
 import cloudinary from "../../utils/cloudinary.js";
 import productModel from "../../../DB/models/product.model.js";
+import { populate } from "dotenv";
 
 
 
@@ -76,12 +77,27 @@ export const getInActiveBySubCategoryId = async (req,res,next)=>{
     const products = await productModel.find({status: "inactive", subCategoryId}).select('name description status stock mainImage');
     return res.status(200).json({message: "success", products});
 }
-
+// get product details by productId for all users
 export const getProductDetails = async (req,res,next)=>{
     const {productId} = req.params;
     const product = await productModel.findById(productId);
     if(!product){
         return next(new AppError("Product not found", 404));
     }
+    return res.status(200).json({message: "success", product});
+}
+
+export const changeStatus = async (req,res,next)=>{
+    const {productId} = req.params;
+    const {status} = req.body;
+    const product = await productModel.findById(productId).populate({path:"subCategoryId",populate:{path:"categoryId" ,select:"admins"} });
+    if(!product){
+        return next(new AppError("product not found", 404));
+    }
+    if(!product.subCategoryId.categoryId.admins.includes(req.id) && req.role != 'super_Admin'){
+        return next(new AppError('You are not authorized to access this category',403));
+    }
+    product.status = status;
+    await product.save();
     return res.status(200).json({message: "success", product});
 }

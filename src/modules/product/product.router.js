@@ -25,5 +25,6 @@ router.get('/active/:subCategoryId',auth(['super_Admin','admin','delivery_Agent'
 router.get('/inActive/:subCategoryId',auth(['super_Admin','admin']),validation(schema.getInActiveBySubCategoryIdSchema),asyncHandler(controller.getInActiveBySubCategoryId));
 // url/product/:productId
 router.get('/:productId',auth(['super_Admin','admin','delivery_Agent' , 'user']),validation(schema.getProductDetailsSchema),asyncHandler(controller.getProductDetails));
-
+// url/product/changeStatus/:productId
+router.patch('/changeStatus/:productId',auth(['super_Admin','admin']),validation(schema.changeStatusSchema),asyncHandler(controller.changeStatus));
 export default router;
