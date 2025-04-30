@@ -135,7 +135,9 @@ export const updateImage = async (req, res, next) => {
      if(!req.files){
                 return next(new AppError("please upload a image", 400));
             }
-            const {secure_url, public_id} = await cloudinary.uploader.upload(req.files.image[0].path); 
+            const {secure_url, public_id} = await cloudinary.uploader.upload(req.files.image[0].path,
+                {folder: `${process.env.APP_NAME}/category/${category.name}/subCategory/${subCategory.name}`}
+            ); 
             if(!secure_url){
                 return next(new AppError("error in uploading the image", 400));
             }

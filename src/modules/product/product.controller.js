@@ -9,16 +9,24 @@ import productModel from "../../../DB/models/product.model.js";
 export const createProduct = async (req, res, next) => {
     const {name , description , price, subCategoryId } = req.body;
     req.body.slug = slugify(name);
-    const checkSubCategory = await subCategoryModel.findById(subCategoryId);
+    const checkSubCategory = await subCategoryModel.findById(subCategoryId).populate("categoryId");
     if(!checkSubCategory){
         return next(new AppError("SubCategory not found", 404));
     } 
-    const {secure_url, public_id} = await cloudinary.uploader.upload(req.files.mainImage[0].path);
+    const {secure_url, public_id} = await cloudinary.uploader.upload(req.files.mainImage[0].path,
+        {
+            folder: `${process.env.APP_NAME}/category/${checkSubCategory.categoryId.name}/subCategory/${checkSubCategory.name}/product/${name}/mainImage`,
+        }
+    );
 
     req.body.subImages = [];
     if(req.files.subImages){
         for(const file of req.files.subImages){
-            const {secure_url, public_id} = await cloudinary.uploader.upload(file.path);
+            const {secure_url, public_id} = await cloudinary.uploader.upload(file.path,
+                {
+                     folder: `${process.env.APP_NAME}/category/${checkSubCategory.categoryId.name}/subCategory/${checkSubCategory.name}/product/${name}/subImages`
+                }
+            );
             req.body.subImages.push({secure_url, public_id});
         }
     }
