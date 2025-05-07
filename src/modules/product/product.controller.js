@@ -101,3 +101,52 @@ export const changeStatus = async (req,res,next)=>{
     await product.save();
     return res.status(200).json({message: "success", product});
 }
+
+export const updateProduct = async (req,res,next)=>{
+    const {productId} = req.params;
+    const {name , subCategoryId } = req.body;
+    const product = await productModel.findById(productId).populate({path:"subCategoryId",populate:{path:"categoryId" ,select:"name admins"} });
+    if(!product){
+        return next(new AppError("product not found", 404));
+    }
+    if (product.createdBy != req.id) {
+        return next(new AppError('You are not authorized to update this product', 403));
+    }
+    if(name){
+        req.body.slug = slugify(name);
+    }
+    if(req.files.mainImage){
+        if(product.mainImage && product.mainImage.public_id){
+            await cloudinary.uploader.destroy(product.mainImage.public_id);
+        }
+        const {secure_url, public_id} = await cloudinary.uploader.upload(req.files.mainImage[0].path,
+            {
+                folder: `${process.env.APP_NAME}/category/${product.subCategoryId.categoryId.name}/subCategory/${product.subCategoryId.name}/product/${product._id}/mainImage`,
+            }
+        );
+        req.body.mainImage = {secure_url, public_id};
+    }
+    req.body.subImages = [];
+    if(req.files.subImages){
+        if (product.subImages && Array.isArray(product.subImages)) {
+            for (const image of product.subImages) {
+                await cloudinary.uploader.destroy(image.public_id);
+            }
+        }
+        for(const file of req.files.subImages){
+            const {secure_url, public_id} = await cloudinary.uploader.upload(file.path,
+                {
+                     folder: `${process.env.APP_NAME}/category/${product.subCategoryId.categoryId.name}/subCategory/${product.subCategoryId.name}/product/${product._id}/subImages`,
+                }
+            );
+            req.body.subImages.push({secure_url, public_id});
+        }
+    }
+    req.body.updatedBy = req.id;
+    req.body.subCategoryId = subCategoryId;
+    const updatedProduct = await productModel.findByIdAndUpdate(productId,{...req.body},{new:true});
+    if(!updatedProduct){
+        return next(new AppError("Failed to update product", 400));
+    }
+    return res.status(200).json({message: "Product updated successfully", updatedProduct});
+}

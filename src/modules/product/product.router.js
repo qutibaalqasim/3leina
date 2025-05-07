@@ -27,4 +27,9 @@ router.get('/inActive/:subCategoryId',auth(['super_Admin','admin']),validation(s
 router.get('/:productId',auth(['super_Admin','admin','delivery_Agent' , 'user']),validation(schema.getProductDetailsSchema),asyncHandler(controller.getProductDetails));
 // url/product/changeStatus/:productId
 router.patch('/changeStatus/:productId',auth(['super_Admin','admin']),validation(schema.changeStatusSchema),asyncHandler(controller.changeStatus));
+// url/product/:productId
+router.put('/:productId',auth(['super_Admin','admin','delivery_Agent','user']),fileUpload(fileValidation.image).fields([
+    {name: "mainImage" , maxCount: 1},
+    {name: "subImages" , maxCount: 5}
+]),validation(schema.updateProductSchema),asyncHandler(controller.updateProduct));
 export default router;
