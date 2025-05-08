@@ -18,3 +18,7 @@ export const updateSchema = joi.object({
     expireDate: joi.date(),
     status: joi.string().valid('active', 'inactive'),
 });
+
+export const deleteCouponSchema = joi.object({
+    id: joi.string().required(),
+});

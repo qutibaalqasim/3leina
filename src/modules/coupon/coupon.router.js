@@ -20,6 +20,8 @@ router.get('/inactive', auth(['super_Admin']), asyncHandler(controller.getInacti
 router.get('/:id', auth(['super_Admin']),validation(schema.getCouponDetailsSchema), asyncHandler(controller.getCouponDetails));
 // url/coupon/:id
 router.put('/:id', auth(['super_Admin']),validation(schema.updateSchema), asyncHandler(controller.updateCoupon));
+// url/coupon/:id
+router.delete('/:id', auth(['super_Admin']),validation(schema.deleteCouponSchema), asyncHandler(controller.deleteCoupon));
 
 
 

@@ -67,3 +67,13 @@ export const updateCoupon = async (req,res,next)=>{
     const updatedCoupon = await couponModel.findByIdAndUpdate(id, req.body, {new: true});
     return res.status(200).json({message:"success", updatedCoupon});
 }
+
+export const deleteCoupon = async (req,res,next)=>{
+    const {id} = req.params;
+    const coupon = await couponModel.findByIdAndDelete(id);
+    if(!coupon) {
+        return next(new AppError('Coupon not found', 404));
+    }
+    return res.status(200).json({message:"Coupon deleted successfully"});
+}
+
