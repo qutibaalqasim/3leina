@@ -39,3 +39,34 @@ export const getFavorite = async (req, res, next) => {
     }
     return res.status(200).json({ message: "success", favorite });
 }
+
+export const clearFavorite = async (req, res, next) => {
+    const favorite = await favoriteModel.findOneAndDelete({ userId: req.id });
+    if (!favorite) {
+        return next(new AppError("No favorite found", 404));
+    }
+    return res.status(200).json({ message: "success"});
+}
+
+export const deleteFromFavorite = async (req, res, next) => {
+    const { productId, userId } = req.body;
+    const favorite = await favoriteModel.findOne({ userId: req.id });
+    if (!favorite) {
+        return next(new AppError("No favorite found", 404));
+    }
+    if (productId) {
+        const updatedFavorite = await favoriteModel.findOneAndUpdate(
+            { userId: req.id },
+            { $pull: { favoriteProducts: productId } },
+            { new: true }
+        );
+        return res.status(200).json({ message: "Removed from favorite", updatedFavorite });
+    } else if (userId) {
+        const updatedFavorite = await favoriteModel.findOneAndUpdate(
+            { userId: req.id },
+            { $pull: { favoriteUsers: userId } },
+            { new: true }
+        );
+        return res.status(200).json({ message: "Removed from favorite", updatedFavorite });
+    }
+}

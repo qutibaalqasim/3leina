@@ -13,6 +13,10 @@ const router = Router();
 router.post('/', auth(['super_Admin','admin', 'delivery_Agent' , 'user']),validation(schema.addToFavoriteSchema), asyncHandler(controller.addToFavorite));
 //url/favorite
 router.get('/', auth(['super_Admin','admin', 'delivery_Agent' , 'user']), asyncHandler(controller.getFavorite));
+//url/favorite
+router.delete('/', auth(['super_Admin','admin', 'delivery_Agent' , 'user']), asyncHandler(controller.clearFavorite));
+//url/favorite
+router.delete('/deleteOne', auth(['super_Admin','admin', 'delivery_Agent' , 'user']),validation(schema.deleteFromFavoriteSchema), asyncHandler(controller.deleteFromFavorite));
 
 
 
