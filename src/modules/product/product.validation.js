@@ -43,3 +43,7 @@ export const updateProductSchema = joi.object({
     sizes: joi.array().items(joi.string().valid('sm', 'md', 'lg', 'xlg', '2xlg', '3xlg')),
     subCategoryId: joi.string().required(),
 });
+
+export const deleteProductSchema = joi.object({
+    productId: joi.string().required(),
+});

@@ -3,7 +3,6 @@ import subCategoryModel from "../../../DB/models/subCategory.model.js";
 import { AppError } from "../../utils/AppError.js";
 import cloudinary from "../../utils/cloudinary.js";
 import productModel from "../../../DB/models/product.model.js";
-import { populate } from "dotenv";
 
 
 
@@ -149,4 +148,52 @@ export const updateProduct = async (req,res,next)=>{
         return next(new AppError("Failed to update product", 400));
     }
     return res.status(200).json({message: "Product updated successfully", updatedProduct});
+}
+
+export const deleteProduct = async (req,res,next)=>{
+    const {productId} = req.params;
+    const product = await productModel.findById(productId).populate({path:"subCategoryId",populate:{path:"categoryId" ,select:"name admins"} });
+    if(!product){
+        return next(new AppError("product not found", 404));
+    }
+    if (product.createdBy != req.id) {
+        return next(new AppError('You are not authorized to delete this product', 403));
+    }
+    if(product.mainImage && product.mainImage.public_id){
+      try{
+        await cloudinary.uploader.destroy(product.mainImage.public_id);
+      }catch(err){
+        console.log("Could not delete mainImage:", err.message);
+      }
+    }
+    if (product.subImages && Array.isArray(product.subImages)) {
+       try{
+        for (const image of product.subImages) {
+            await cloudinary.uploader.destroy(image.public_id);
+        }
+       }catch(err){
+        console.log("Could not delete subImages:", err.message);
+       }
+        
+    }
+    const path = `${process.env.APP_NAME}/category/${product.subCategoryId.categoryId.name}/subCategory/${product.subCategoryId.name}/product/${product._id}`;
+    try {
+        await cloudinary.api.delete_folder(`${path}/mainImage`);
+    } catch (err) {
+        console.log("Could not delete mainImage folder:", err.message);
+    }
+
+    try {
+        await cloudinary.api.delete_folder(`${path}/subImages`);
+    } catch (err) {
+        console.log("Could not delete subImages folder:", err.message);
+    }
+
+    try {
+        await cloudinary.api.delete_folder(path);
+    } catch (err) {
+        console.log("Could not delete product folder:", err.message);
+    }
+    await productModel.findByIdAndDelete(productId);
+    return res.status(200).json({message: "Product deleted successfully"});
 }

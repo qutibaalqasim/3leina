@@ -32,4 +32,6 @@ router.put('/:productId',auth(['super_Admin','admin','delivery_Agent','user']),f
     {name: "mainImage" , maxCount: 1},
     {name: "subImages" , maxCount: 5}
 ]),validation(schema.updateProductSchema),asyncHandler(controller.updateProduct));
+// url/product/:productId
+router.delete('/:productId',auth(['super_Admin','admin','delivery_Agent','user']),validation(schema.deleteProductSchema),asyncHandler(controller.deleteProduct));
 export default router;
