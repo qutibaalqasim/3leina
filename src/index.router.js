@@ -8,6 +8,7 @@ import adminRouter from './modules/admin/admin.router.js';
 import subCategoryRouter from './modules/subCategory/subCategory.router.js';
 import productRouter from './modules/product/product.router.js';
 import couponRouter from './modules/coupon/coupon.router.js';
+import cartRouter from './modules/cart/cart.router.js';
 
 const initApp = async (app , express)=>{
     app.use(express.json());
@@ -35,6 +36,8 @@ const initApp = async (app , express)=>{
     app.use('/product', productRouter);
     // url/coupon
     app.use('/coupon', couponRouter);
+    // url/cart
+    app.use('/cart', cartRouter);
     app.use((err,req,res,next)=>{
         return res.status(err.statusCode).json({message:err.message});
     });
