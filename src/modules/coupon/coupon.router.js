@@ -12,6 +12,12 @@ const router = Router();
 router.post('/', auth(['super_Admin']),validation(schema.createSchema), asyncHandler(controller.create));
 // url/coupon
 router.get('/', auth(['super_Admin']), asyncHandler(controller.getAll));
+// url/coupon/active
+router.get('/active', auth(['super_Admin']), asyncHandler(controller.getActive));
+// url/coupon/inactive
+router.get('/inactive', auth(['super_Admin']), asyncHandler(controller.getInactive));
+// url/coupon/:id
+router.get('/:id', auth(['super_Admin']), asyncHandler(controller.getCouponDetails));
 
 
 

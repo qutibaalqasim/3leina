@@ -21,7 +21,32 @@ export const create = async (req, res, next) => {
 export const getAll = async (req, res) => {
     const coupons = await couponModel.find({});
     if(!coupons || coupons.length === 0) {
-        return res.status(404).json({message: 'No coupons found'});
+        return next(new AppError('No coupons found', 404));
     }
     return res.status(200).json({message: 'Coupons retrieved successfully', coupons});
+}
+
+export const getActive = async (req,res,next)=>{
+    const coupons = await couponModel.find({status: 'active'});
+    if(!coupons || coupons.length === 0) {
+        return next(new AppError('No active coupons found', 404));
+    }
+    return res.status(200).json({message: 'Active coupons retrieved successfully', coupons});
+}
+
+export const getInactive = async (req,res,next)=>{
+    const coupons = await couponModel.find({status: 'inactive'});
+    if(!coupons || coupons.length === 0) {
+        return next(new AppError('No inactive coupons found', 404));
+    }
+    return res.status(200).json({message: 'Inactive coupons retrieved successfully', coupons});
+}
+
+export const getCouponDetails = async (req,res,next)=>{
+    const {id} = req.params;
+    const coupon = await couponModel.findById(id);
+    if(!coupon) {
+        return next(new AppError('Coupon not found', 404));
+    }
+    return res.status(200).json({message: 'Coupon retrieved successfully', coupon});
 }
