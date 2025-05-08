@@ -1,4 +1,5 @@
 import favoriteModel from "../../../DB/models/favorite.model.js";
+import { AppError } from "../../utils/AppError.js";
 
 
 export const addToFavorite = async (req, res, next) => {
@@ -28,4 +29,13 @@ export const addToFavorite = async (req, res, next) => {
         );
         return res.status(200).json({ message: "Added to favorite", updatedFavorite });
     }
+}
+
+export const getFavorite = async (req, res, next) => {
+    const favorite = await favoriteModel.findOne({ userId: req.id })
+    .populate('favoriteProducts' , "name price mainImage").populate('favoriteUsers', "userName email userImage address phone");
+    if (!favorite) {
+        return next(new AppError("No favorite found", 404));
+    }
+    return res.status(200).json({ message: "success", favorite });
 }
