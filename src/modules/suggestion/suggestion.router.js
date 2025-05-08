@@ -16,6 +16,8 @@ fileUpload(fileValidation.image).fields([
 ]),
 validation(schema.createSuggestionSchema),
 asyncHandler(controller.createSuggestion));
+//url/suggestion
+router.get('/',auth(['super_Admin']), asyncHandler(controller.getAllSuggestion));
 
 
 

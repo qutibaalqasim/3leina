@@ -1,4 +1,5 @@
 import suggestionModel from "../../../DB/models/suggestion.model.js";
+import { AppError } from "../../utils/AppError.js";
 import cloudinary from "../../utils/cloudinary.js";
 
 
@@ -21,4 +22,10 @@ export const createSuggestion = async (req, res, next) => {
     if (!newSuggestion) return next(new AppError("Failed to create suggestion", 400));
     return res.status(201).json({ message: "success", suggestion: newSuggestion });
     
+}
+
+export const getAllSuggestion = async (req, res, next) => {
+    const suggestion = await suggestionModel.find({});
+    if (!suggestion) return next(new AppError("Failed to get suggestion", 400));
+    return res.status(200).json({ message: "success", suggestion });
 }
