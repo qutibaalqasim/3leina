@@ -20,6 +20,14 @@ export const addToCart = async (req, res, next) => {
     return res.status(200).json({message: "success", cart});
 }
 
+export const getCart = async (req, res, next) => {
+    const cart = await cartModel.findOne({userId: req.id}).populate("products.productId", "name price image");
+    if(!cart){
+       return next(new AppError("Cart not found", 404));
+    }
+    return res.status(200).json({message: "success", cart});
+}
+
 export const clearCart = async (req, res, next) => {
     const cart = await cartModel.findOne({userId: req.id});
     if(!cart){
@@ -27,6 +35,19 @@ export const clearCart = async (req, res, next) => {
     }
     cart.products = [];
     await cart.save();
+    return res.status(200).json({message: "success", cart});
+}
+
+export const deleteFromCart = async (req,res,next)=>{
+    const {productId} = req.body;
+    const cart = await cartModel.findOneAndUpdate(
+        { userId: req.id },
+        { $pull: { products: { productId } } },
+        { new: true }
+      );
+    if(!cart){
+        return next(new AppError("Cart not found", 404));
+    }
     return res.status(200).json({message: "success", cart});
 }
 
@@ -48,24 +69,3 @@ export const updateQuantity = async (req, res, next) => {
 
 }
 
-
-export const deleteFromCart = async (req,res,next)=>{
-    const {productId} = req.body;
-    const cart = await cartModel.findOneAndUpdate(
-        { userId: req.id },
-        { $pull: { products: { productId } } },
-        { new: true }
-      );
-    if(!cart){
-        return next(new AppError("Cart not found", 404));
-    }
-    return res.status(200).json({message: "success", cart});
-}
-
-export const getCart = async (req, res, next) => {
-    const cart = await cartModel.findOne({userId: req.id}).populate("products.productId", "name price image");
-    if(!cart){
-       return next(new AppError("Cart not found", 404));
-    }
-    return res.status(200).json({message: "success", cart});
-}
