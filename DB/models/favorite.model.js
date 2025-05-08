@@ -10,18 +10,18 @@ const favoriteSchema = new Schema({
     },
     favoriteProducts:[
         {
-            productId:{
+           
                 type: Types.ObjectId,
                 ref: "Product",
-            },
+            
         }
     ],
     favoriteUsers:[
         {
-            userId:{
+            
                 type: Types.ObjectId,
                 ref: "User",
-            },
+            
         }
     ]
 }, {
