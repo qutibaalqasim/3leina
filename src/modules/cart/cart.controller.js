@@ -1,4 +1,5 @@
 import cartModel from "../../../DB/models/cart.model.js";
+import productModel from "../../../DB/models/product.model.js";
 import { AppError } from "../../utils/AppError.js";
 
 
@@ -26,6 +27,38 @@ export const clearCart = async (req, res, next) => {
     }
     cart.products = [];
     await cart.save();
+    return res.status(200).json({message: "success", cart});
+}
+
+export const updateQuantity = async (req, res, next) => {
+    const {productId, quantity} = req.body;
+    const product = await productModel.findById(productId);
+    if(product.stock < quantity){
+        return next(new AppError("Not enough stock", 409));
+    }
+    const cart = await cartModel.findOneAndUpdate(
+        { userId: req.id, "products.productId": productId },
+        { $set: { "products.$.quantity": quantity } },
+        { new: true }
+    );
+    if(!cart){
+        return next(new AppError("Cart not found", 404));
+    }
+    return res.status(200).json({message: "success", cart});
+
+}
+
+
+export const deleteFromCart = async (req,res,next)=>{
+    const {productId} = req.body;
+    const cart = await cartModel.findOneAndUpdate(
+        { userId: req.id },
+        { $pull: { products: { productId } } },
+        { new: true }
+      );
+    if(!cart){
+        return next(new AppError("Cart not found", 404));
+    }
     return res.status(200).json({message: "success", cart});
 }
 

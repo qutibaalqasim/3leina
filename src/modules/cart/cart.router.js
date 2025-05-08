@@ -10,8 +10,12 @@ const router = Router();
 router.post('/',auth(['super_Admin','admin', 'delivery_Agent' , 'user']),validation(schema.addToCartSchema), asyncHandler(controller.addToCart));
 // url/cart
 router.delete('/',auth(['super_Admin','admin', 'delivery_Agent' , 'user']), asyncHandler(controller.clearCart));
+// url/cart/deleteOne
+router.delete('/deleteOne',auth(['super_Admin','admin', 'delivery_Agent' , 'user']),validation(schema.deleteFromCartSchema), asyncHandler(controller.deleteFromCart));
 // url/cart
 router.get('/',auth(['super_Admin','admin', 'delivery_Agent' , 'user']), asyncHandler(controller.getCart));
+// url/cart
+router.patch('/',auth(['super_Admin','admin', 'delivery_Agent' , 'user']),validation(schema.updateQuantitySchema), asyncHandler(controller.updateQuantity));
 
 
 
