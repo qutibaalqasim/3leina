@@ -17,3 +17,11 @@ export const create = async (req, res, next) => {
    const coupon = await couponModel.create(req.body);
     return res.status(201).json({message: 'Coupon created successfully', coupon});
 }
+
+export const getAll = async (req, res) => {
+    const coupons = await couponModel.find({});
+    if(!coupons || coupons.length === 0) {
+        return res.status(404).json({message: 'No coupons found'});
+    }
+    return res.status(200).json({message: 'Coupons retrieved successfully', coupons});
+}

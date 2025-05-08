@@ -10,7 +10,8 @@ const router = Router();
 
 // url/coupon
 router.post('/', auth(['super_Admin']),validation(schema.createSchema), asyncHandler(controller.create));
-
+// url/coupon
+router.get('/', auth(['super_Admin']), asyncHandler(controller.getAll));
 
 
 
