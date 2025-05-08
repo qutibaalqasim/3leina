@@ -50,3 +50,20 @@ export const getCouponDetails = async (req,res,next)=>{
     }
     return res.status(200).json({message: 'Coupon retrieved successfully', coupon});
 }
+
+export const updateCoupon = async (req,res,next)=>{
+    const {id} = req.params;
+    const coupon = await couponModel.findById(id);
+    if(!coupon) {
+        return next(new AppError('Coupon not found', 404));
+    }
+    if(req.body.expireDate) {
+        req.body.expireDate = new Date(req.body.expireDate);
+        if(req.body.expireDate < new Date()){
+            return next(new AppError('Expire date should be greater than today', 400));
+        }
+    }
+    req.body.updatedBy = req.id;
+    const updatedCoupon = await couponModel.findByIdAndUpdate(id, req.body, {new: true});
+    return res.status(200).json({message:"success", updatedCoupon});
+}

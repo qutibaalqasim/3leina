@@ -17,7 +17,9 @@ router.get('/active', auth(['super_Admin']), asyncHandler(controller.getActive))
 // url/coupon/inactive
 router.get('/inactive', auth(['super_Admin']), asyncHandler(controller.getInactive));
 // url/coupon/:id
-router.get('/:id', auth(['super_Admin']), asyncHandler(controller.getCouponDetails));
+router.get('/:id', auth(['super_Admin']),validation(schema.getCouponDetailsSchema), asyncHandler(controller.getCouponDetails));
+// url/coupon/:id
+router.put('/:id', auth(['super_Admin']),validation(schema.updateSchema), asyncHandler(controller.updateCoupon));
 
 
 
