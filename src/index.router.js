@@ -10,6 +10,7 @@ import productRouter from './modules/product/product.router.js';
 import couponRouter from './modules/coupon/coupon.router.js';
 import cartRouter from './modules/cart/cart.router.js';
 import favoriteRouter from './modules/favorite/favorite.router.js';
+import suggestionRouter from './modules/suggestion/suggestion.router.js';
 
 const initApp = async (app , express)=>{
     app.use(express.json());
@@ -41,6 +42,8 @@ const initApp = async (app , express)=>{
     app.use('/cart', cartRouter);
     // url/favorite
     app.use('/favorite', favoriteRouter);
+    // url/suggestion
+    app.use('/suggestion', suggestionRouter);
     app.use((err,req,res,next)=>{
         return res.status(err.statusCode).json({message:err.message});
     });

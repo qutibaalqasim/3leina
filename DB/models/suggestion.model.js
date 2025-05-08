@@ -12,7 +12,7 @@ const suggestionSchema = new Schema({
         required: true,
     },
     image:{
-        type: ObjectId,
+        type: Object,
     }
 },{ timestamps: true });
 
