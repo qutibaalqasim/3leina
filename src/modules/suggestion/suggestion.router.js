@@ -18,6 +18,8 @@ validation(schema.createSuggestionSchema),
 asyncHandler(controller.createSuggestion));
 //url/suggestion
 router.get('/',auth(['super_Admin']), asyncHandler(controller.getAllSuggestion));
+//url/suggestion/:id
+router.delete('/:id',auth(['admin', 'delivery_Agent' , 'user']),validation(schema.deleteSuggestionSchema),asyncHandler(controller.deleteSuggestion));
 
 
 

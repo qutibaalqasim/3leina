@@ -29,3 +29,21 @@ export const getAllSuggestion = async (req, res, next) => {
     if (!suggestion) return next(new AppError("Failed to get suggestion", 400));
     return res.status(200).json({ message: "success", suggestion });
 }
+
+export const updateSuggestion = async (req,res,next)=>{
+    
+}
+
+export const deleteSuggestion = async (req, res, next) => {
+    const { id } = req.params;
+    const suggestion = await suggestionModel.findById(id);
+    if(req.id != suggestion.userId){
+        return next(new AppError("You are not allowed to delete this suggestion", 403));
+    }
+    await cloudinary.uploader.destroy(suggestion.image.public_id, {
+        folder: `${process.env.APP_NAME}/suggestion/${req.id}`,
+    });
+    const deletedSuggestion = await suggestionModel.findByIdAndDelete(id);
+    if (!deletedSuggestion) return next(new AppError("Failed to delete suggestion", 400));
+    return res.status(200).json({ message: "success" });
+}
