@@ -20,7 +20,11 @@ asyncHandler(controller.createSuggestion));
 router.get('/',auth(['super_Admin']), asyncHandler(controller.getAllSuggestion));
 //url/suggestion/:id
 router.delete('/:id',auth(['admin', 'delivery_Agent' , 'user']),validation(schema.deleteSuggestionSchema),asyncHandler(controller.deleteSuggestion));
-
+// url/suggestion/:id
+router.put('/:id',auth(['admin', 'delivery_Agent' , 'user']),
+fileUpload(fileValidation.image).fields([
+    {name: "image" , maxCount: 1},
+]),validation(schema.updateSuggestionSchema), asyncHandler(controller.updateSuggestion));
 
 
 

@@ -31,7 +31,30 @@ export const getAllSuggestion = async (req, res, next) => {
 }
 
 export const updateSuggestion = async (req,res,next)=>{
+    const {id} = req.params;
+    const suggestion = await suggestionModel.findById(id);
+    if(!suggestion){
+        return next(new AppError('not found!!', 404));
+    }
+     if(req.id != suggestion.userId){
+        return next(new AppError("You are not allowed to delete this suggestion", 403));
+    }
+    if(req.body.files){
+        await cloudinary.uploader.destroy(suggestion.image.public_id, {
+        folder: `${process.env.APP_NAME}/suggestion/${req.id}`,
+    });
+    const {secure_url, public_id} = await cloudinary.uploader.upload(req.files.image[0].path,
+            {
+                folder: `${process.env.APP_NAME}/suggestion/${req.id}`,
+            }
+        );
+         req.body.image = {secure_url, public_id};
+    }
     
+     const updatedSuggestion = await suggestionModel.findByIdAndUpdate(id ,{...req.body},{new: true});
+     return res.status(200).json({message:"updated successfully", updatedSuggestion});
+
+  
 }
 
 export const deleteSuggestion = async (req, res, next) => {

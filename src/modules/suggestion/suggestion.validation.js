@@ -9,3 +9,8 @@ export const createSuggestionSchema = joi.object({
 export const deleteSuggestionSchema = joi.object({
     id: joi.string().required(),
 });
+
+export const updateSuggestionSchema = joi.object({
+    id: joi.string().required(),
+    suggestion: joi.string(),
+});
