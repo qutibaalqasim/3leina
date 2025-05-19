@@ -24,3 +24,7 @@ export const updateCategorySchema = joi.object({
 export const updateImageSchema = joi.object({
     id: joi.string().required(),
 });
+
+export const deleteCategorySchema = joi.object({
+    categoryId: joi.string().required(),
+});

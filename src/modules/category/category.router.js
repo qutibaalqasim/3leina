@@ -25,5 +25,7 @@ router.put('/:id', auth(['super_Admin', 'admin']), validation(schema.updateCateg
 router.put('/:id/image', auth(['super_Admin', 'admin']), fileUpload(fileValidation.image).fields([
     {name:"image" , maxCount:1}
 ]) , validation(schema.updateImageSchema), asyncHandler(controller.updateImage));
+// url/category/:categoryId
+router.delete('/:categoryId', auth(['super_Admin']), validation(schema.deleteCategorySchema), asyncHandler(controller.deleteCategory));
 
 export default router;

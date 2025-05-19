@@ -2,6 +2,8 @@ import slugify from 'slugify';
 import categoryModel from '../../../DB/models/category.model.js';
 import { AppError } from '../../utils/AppError.js';
 import cloudinary from '../../utils/cloudinary.js';
+import subCategoryModel from '../../../DB/models/subCategory.model.js';
+import productModel from '../../../DB/models/product.model.js';
 
 
 export const createCategory = async (req, res, next) => {
@@ -109,12 +111,34 @@ export const updateImage = async (req,res,next)=>{
         return res.status(200).json({message: 'Category image updated successfully', category});
 }
 
-/*export const deleteCategory = async (req,res,next)=>{
-    const {id} = req.params;
-    const category = await categoryModel.findById(id);
+export const deleteCategory = async (req,res,next)=>{
+    const {categoryId} = req.params;
+    const category = await categoryModel.findById(categoryId);
     if(!category){
         return next(new AppError('Category not found',404));
     }
-    await categoryModel.findByIdAndDelete(id);
-    return res.status(200).json({message: 'Category deleted successfully'});
-}*/
+    const subCategories = await subCategoryModel.find({categoryId});
+    for(const subCategory of subCategories){
+        const products = await productModel.find({subCategoryId: subCategory._id});
+
+        for(const product of products){
+            if(product.image){
+                await cloudinary.uploader.destroy(product.image);
+            }
+
+            await product.deleteOne();
+        }
+        if (subCategory.image) {
+            await cloudinary.uploader.destroy(subCategory.image);
+        }
+
+        await subCategory.deleteOne();
+    }
+
+    if(category.image){
+        await cloudinary.uploader.destroy(category.image);
+    }
+
+    await category.deleteOne();
+    return res.status(200).json({message:"success"});
+}
