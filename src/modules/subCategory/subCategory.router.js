@@ -30,4 +30,6 @@ router.put('/update/:subCategoryId', auth(['super_Admin', 'admin']), validation(
 router.patch('/image/:subCategoryId', auth(['super_Admin', 'admin']),fileUpload(fileValidation.image).fields([
     {name:"image" , maxCount:1}
 ]) ,validation(schema.updateImageSchema), asyncHandler(controller.updateImage));
+// url/subCategory/:subCategoryId
+router.delete('/:subCategoryId', auth(['super_Admin']), validation(schema.deleteSubCategorySchema), asyncHandler(controller.deleteSubCategory));
 export default router;

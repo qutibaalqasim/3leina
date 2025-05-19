@@ -33,3 +33,7 @@ export const updateSubCategorySchema = joi.object({
 export const updateImageSchema = joi.object({
     subCategoryId: joi.string().required(),
 });
+
+export const deleteSubCategorySchema = joi.object({
+    subCategoryId: joi.string().required(),
+});

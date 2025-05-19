@@ -3,6 +3,7 @@ import categoryModel from "../../../DB/models/category.model.js";
 import { AppError } from "../../utils/AppError.js";
 import subCategoryModel from "../../../DB/models/subCategory.model.js";
 import cloudinary from "../../utils/cloudinary.js";
+import productModel from "../../../DB/models/product.model.js";
 
 
 
@@ -144,4 +145,27 @@ export const updateImage = async (req, res, next) => {
             subCategory.image = {secure_url , public_id};
             await subCategory.save(); 
             return res.status(200).json({message: 'success', category});
+}
+
+export const deleteSubCategory = async (req,res,next)=>{
+    const {subCategoryId} = req.params;
+    const subCategory = await subCategoryModel.findById(subCategoryId);
+    if(!subCategory){
+        return next(new AppError("subCategory not found", 404));
+    }
+    const products = await productModel.find({subCategoryId});
+    if(products){
+        for (const product of products) {
+           if(product.image){
+                await cloudinary.uploader.destroy(product.image);
+           }
+            await product.deleteOne();
+        }
+    }
+    if(subCategory.image){
+        await cloudinary.uploader.destroy(subCategory.image);
+    }
+
+    await subCategory.deleteOne();
+    return res.status(200).json({message:"success"});
 }
