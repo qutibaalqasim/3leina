@@ -89,7 +89,11 @@ export const updateUserImage = async (req,res,next)=>{
     if(!req.files){
         return next(new AppError("please upload a file", 400));
     }
-    const {secure_url, public_id} = await cloudinary.uploader.upload(req.files.userImage[0].path); 
+    const {secure_url, public_id} = await cloudinary.uploader.upload(req.files.userImage[0].path,
+        {
+            folder: `${process.env.APP_NAME}/users/${user.userName}`
+        }
+    ); 
     if(!secure_url){
         return next(new AppError("error in uploading the image", 400));
     }
