@@ -13,6 +13,8 @@ router.post('/',auth(['super_Admin','admin', 'delivery_Agent' , 'user']),validat
 router.get('/all', auth(['super_Admin']), asyncHandler(controller.getAllOrders));
 // url/order
 router.get('/', auth(['super_Admin','admin', 'delivery_Agent' , 'user']), asyncHandler(controller.getUserOrders));
+// url/order/:status
+router.get('/:status', auth(['super_Admin']), validation(schema.getOrderByStatusSchema), asyncHandler(controller.getOrderByStatus));
 
 
 

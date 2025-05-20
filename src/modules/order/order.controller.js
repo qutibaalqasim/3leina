@@ -85,3 +85,9 @@ export const getUserOrders = async (req,res,next)=>{
     const orders = await orderModel.find({userId:req.id});
     return res.status(200).json({message:"success", orders});
 }
+
+export const getOrderByStatus = async (req,res,next)=>{
+    const {status} = req.params;
+    const orders = await orderModel.find({status});
+    return res.status(200).json({message:"success", orders});
+}
