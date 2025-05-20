@@ -60,6 +60,11 @@ const orderSchema = new Schema({
    },
     note:String,
    reasonRejected:String,
+   
+   deliveryAgent:{
+    type: Types.ObjectId,
+    ref: "User",
+   },
    updatedBy:{
      type: Types.ObjectId,
      ref: "User",

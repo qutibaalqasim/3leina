@@ -97,6 +97,7 @@ export const getConfirmedOrders = async (req,res,next)=>{
     return res.status(200).json({message:"success", orders});
 }
 
+//for all users have an order
 export const cancelledOrder = async(req,res,next)=>{
     const {orderId} = req.params;
     const order = await orderModel.findById(orderId);
@@ -125,6 +126,22 @@ export const cancelledOrder = async(req,res,next)=>{
 
 }
 
+export const acceptOrder = async(req,res,next)=>{
+    const {orderId} = req.params;
+    const order = await orderModel.findById(orderId);
+    if(!order){
+        return next (new AppError("order not found",404));
+    }
+    if(order.deliveryAgent){
+        return next(new AppError("the order taken by other delivery",400));
+    }
+    order.deliveryAgent = req.id;
+    await order.save();
+    return res.status(201).json({message:"success", order});
+
+}
+
+// for the superAdmin just
 export const changeStatus = async (req,res,next)=>{
     const {orderId} = req.params;
     const order = await orderModel.findById(orderId);
@@ -138,7 +155,7 @@ export const changeStatus = async (req,res,next)=>{
     }
     order.status = req.body.status;
     order.updatedBy = req.id;
-    const cart = await cartModel.findById(req.id);
+    const cart = await cartModel.findOne({ userId: req.id });
     if(req.body.status == 'confirmed'){
         for(const product of cart.products){
        await productModel.updateOne({_id:product.productId},{
@@ -150,4 +167,14 @@ export const changeStatus = async (req,res,next)=>{
     }
     await order.save();
     return res.status(200).json({message:"success", order});
+}
+
+// for the deliveryAgent
+export const deliveredOrder = async(req,res,next)=>{
+    const {orderId} = req.params;
+    const order = await orderModel.findById(orderId);
+    if(!order){
+        return next(new AppError("order not found",404));
+    }
+
 }
