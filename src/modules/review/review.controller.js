@@ -21,5 +21,8 @@ export const addReview = async (req,res,next)=>{
         productId,
         createdBy: req.id
     });
+    if(!review){
+        return next(new AppError("error while adding review",400));
+    }
     return res.status(201).json({message:"success", review});
 }

@@ -39,7 +39,6 @@ const productSchema = new Schema({
     sizes:[
         {
             type: [String],
-            enum:['sm', 'md' , 'lg' , 'xlg' , '2xlg' , '3xlg'],
         }
     ],
     mainImage:{
@@ -69,7 +68,17 @@ const productSchema = new Schema({
         ref: 'SubCategory',
         required: true,
     }
+},{
+    timestamps:true,
+    toJSON:{virtuals:true},
+    toObject:{virtuals:true}
 });
+
+productSchema.virtual('reviews',{
+    ref: 'Review',
+    localField:'_id',
+    foreignField: 'productId'
+})
 
 const productModel = mongoose.model.Product || mongoose.model('Product', productSchema);
 export default productModel;

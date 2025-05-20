@@ -84,7 +84,7 @@ export const getInActiveBySubCategoryId = async (req,res,next)=>{
 // get product details by productId for all users
 export const getProductDetails = async (req,res,next)=>{
     const {productId} = req.params;
-    const product = await productModel.findById(productId);
+    const product = await productModel.findById(productId).populate('reviews');
     if(!product){
         return next(new AppError("Product not found", 404));
     }
