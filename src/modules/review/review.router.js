@@ -1,0 +1,18 @@
+import { Router } from "express";
+import * as controller from './review.controller.js';
+import * as schema from './review.validation.js';
+import { asyncHandler } from "../../utils/catchError.js";
+import { auth } from "../../middleware/auth.js";
+import validation from "../../middleware/validation.js";
+
+
+const router = Router({mergeParams:true});
+
+router.post('/',auth(['super_Admin','admin', 'delivery_Agent' , 'user']), validation(schema.addReviewSchema), asyncHandler(controller.addReview));
+
+
+
+
+
+
+export default router;

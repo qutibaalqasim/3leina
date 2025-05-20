@@ -5,9 +5,12 @@ import { asyncHandler } from "../../utils/catchError.js";
 import { auth } from "../../middleware/auth.js";
 import fileUpload, { fileValidation } from "../../utils/multer.js";
 import validation from "../../middleware/validation.js";
-
+import reviewRouter from "../review/review.router.js";
 
 const router = Router();
+//url/product/:productId/reviews
+router.use('/:productId/reviews', reviewRouter);
+
 // url/product
 router.post('/',auth(['super_Admin','admin', 'delivery_Agent' , 'user']),fileUpload(fileValidation.image).fields([
     {name: "mainImage" , maxCount: 1},
