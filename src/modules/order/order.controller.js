@@ -91,3 +91,8 @@ export const getOrderByStatus = async (req,res,next)=>{
     const orders = await orderModel.find({status});
     return res.status(200).json({message:"success", orders});
 }
+
+export const getConfirmedOrders = async (req,res,next)=>{
+    const orders = await orderModel.find({status:"confirmed"});
+    return res.status(200).json({message:"success", orders});
+}
