@@ -11,6 +11,7 @@ import couponRouter from './modules/coupon/coupon.router.js';
 import cartRouter from './modules/cart/cart.router.js';
 import favoriteRouter from './modules/favorite/favorite.router.js';
 import suggestionRouter from './modules/suggestion/suggestion.router.js';
+import orderRouter from "./modules/order/order.router.js";
 
 const initApp = async (app , express)=>{
     app.use(express.json());
@@ -44,6 +45,8 @@ const initApp = async (app , express)=>{
     app.use('/favorite', favoriteRouter);
     // url/suggestion
     app.use('/suggestion', suggestionRouter);
+    // url/order
+    app.use('/order', orderRouter);
     app.use((err,req,res,next)=>{
         return res.status(err.statusCode).json({message:err.message});
     });

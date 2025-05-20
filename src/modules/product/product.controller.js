@@ -7,7 +7,7 @@ import productModel from "../../../DB/models/product.model.js";
 
 
 export const createProduct = async (req, res, next) => {
-    const {name , description , price, subCategoryId } = req.body;
+    const {name , description , price, subCategoryId, discount } = req.body;
     req.body.slug = slugify(name);
     const checkSubCategory = await subCategoryModel.findById(subCategoryId).populate("categoryId");
     if(!checkSubCategory){
@@ -31,6 +31,11 @@ export const createProduct = async (req, res, next) => {
         }
     }
     req.body.mainImage = {secure_url, public_id};
+    if(discount){
+        req.body.priceAfterDiscount = price - (price * (discount/100));
+    }else{
+         req.body.priceAfterDiscount = price;
+    }
     req.body.createdBy = req.id;
     req.body.updatedBy = req.id;
     req.body.subCategoryId = subCategoryId;
@@ -141,6 +146,7 @@ export const updateProduct = async (req,res,next)=>{
             req.body.subImages.push({secure_url, public_id});
         }
     }
+    req.body.priceAfterDiscount = req.body.price - (req.body.price * (req.body.discount || 0)/100);
     req.body.updatedBy = req.id;
     req.body.subCategoryId = subCategoryId;
     const updatedProduct = await productModel.findByIdAndUpdate(productId,{...req.body},{new:true});
