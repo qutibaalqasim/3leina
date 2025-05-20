@@ -19,5 +19,5 @@ export const cancelledOrderSchema = joi.object({
 
 export const changeStatusSchema = joi.object({
     orderId: joi.string().required(),
-    status: joi.string().valid("confirmed", "onWay"),
+    status: joi.string().valid("cancelled" ,"confirmed", "onWay"),
 });

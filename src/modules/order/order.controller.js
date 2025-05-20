@@ -131,6 +131,11 @@ export const changeStatus = async (req,res,next)=>{
     if(!order){
         return next(new AppError("order not found",404));
     }
+    if(req.body.status == "cancelled"){
+        if(order.userId != req.id){
+            return next(new AppError("not authrized to cancelled this order",400));
+        }
+    }
     order.status = req.body.status;
     order.updatedBy = req.id;
     const cart = await cartModel.findById(req.id);
