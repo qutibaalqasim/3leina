@@ -75,3 +75,13 @@ export const createOrder = async (req, res, next)=>{
 
     return res.status(201).json({message:"success", order});
 }
+
+export const getAllOrders = async (req,res,next)=>{
+    const orders = await orderModel.find({});
+    return res.status(200).json({message:"success", orders});
+}
+
+export const getUserOrders = async (req,res,next)=>{
+    const orders = await orderModel.find({userId:req.id});
+    return res.status(200).json({message:"success", orders});
+}

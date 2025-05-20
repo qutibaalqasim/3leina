@@ -9,8 +9,10 @@ const router = Router();
 
 // url/order
 router.post('/',auth(['super_Admin','admin', 'delivery_Agent' , 'user']),validation(schema.createOrderSchema),asyncHandler(controller.createOrder));
-
-
+// url/order/all
+router.get('/all', auth(['super_Admin']), asyncHandler(controller.getAllOrders));
+// url/order
+router.get('/', auth(['super_Admin','admin', 'delivery_Agent' , 'user']), asyncHandler(controller.getUserOrders));
 
 
 
