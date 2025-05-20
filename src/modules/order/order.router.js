@@ -13,7 +13,7 @@ router.post('/',auth(['super_Admin','admin', 'delivery_Agent' , 'user']),validat
 router.get('/all', auth(['super_Admin']), asyncHandler(controller.getAllOrders));
 // url/order
 router.get('/', auth(['super_Admin','admin', 'delivery_Agent' , 'user']), asyncHandler(controller.getUserOrders));
-// url/order/confirmed
+// url/order/confirm
 router.get('/confirm', auth(['delivery_Agent']), asyncHandler(controller.getConfirmedOrders));
 // url/order/:status
 router.get('/:status', auth(['super_Admin']), validation(schema.getOrderByStatusSchema), asyncHandler(controller.getOrderByStatus));
@@ -23,6 +23,8 @@ router.patch('/:orderId', auth(['super_Admin','admin', 'delivery_Agent' , 'user'
 router.patch('/accept/:orderId', auth(['delivery_Agent']), validation(schema.acceptOrderSchema), asyncHandler(controller.acceptOrder));
 // url/order/changeStatus/:orderId
 router.patch('/changeStatus/:orderId', auth(['super_Admin']), validation(schema.changeStatusSchema), asyncHandler(controller.changeStatus));
+// url/order/delivered/:orderId
+router.patch('/delivered/:orderId', auth(['delivery_Agent']), validation(schema.deliveredOrderSchema), asyncHandler(controller.deliveredOrder));
 
 
 

@@ -176,5 +176,11 @@ export const deliveredOrder = async(req,res,next)=>{
     if(!order){
         return next(new AppError("order not found",404));
     }
-
+    if(order.deliveryAgent != req.id){
+        return next(new AppError("not authrized to change the status for this order",400));
+    }
+    order.status = req.body.status;
+    order.updatedBy = req.id;
+    await order.save();
+    return res.status(201).json({message:"success", order});
 }
