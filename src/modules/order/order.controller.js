@@ -59,7 +59,6 @@ export const createOrder = async (req, res, next)=>{
         phoneNumber: req.body.phoneNumber,
         finalPrice: subTotal - (subTotal * ((req.body.coupon.amount || 0))/100)
     });
-
     if(req.body.coupon){
         await couponModel.updateOne({_id:req.body.coupon._id},
             {
