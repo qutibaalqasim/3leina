@@ -1,5 +1,5 @@
 import orderModel from "../../../DB/models/order.model.js";
-import reviewModel from "../../../DB/models/Reviews.model.js";
+import reviewModel from "../../../DB/models/reviews.model.js";
 import { AppError } from "../../utils/AppError.js";
 
 
