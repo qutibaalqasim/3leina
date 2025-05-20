@@ -11,7 +11,7 @@ const router = Router({mergeParams:true});
 
 router.post('/',auth(['super_Admin','admin', 'delivery_Agent' , 'user']), validation(schema.addReviewSchema), asyncHandler(controller.addReview));
 router.put('/:reviewId', auth(['super_Admin','admin', 'delivery_Agent' , 'user']), validation(schema.updateReviewSchema), asyncHandler(controller.updateReview));
-
+router.delete('/:reviewId',auth(['super_Admin','admin', 'delivery_Agent' , 'user']),validation(schema.deleteReviewSchema), asyncHandler(controller.deleteReview));
 
 
 

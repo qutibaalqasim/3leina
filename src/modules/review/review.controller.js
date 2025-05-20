@@ -43,3 +43,15 @@ export const updateReview = async (req,res,next)=>{
     await review.save();
     return res.status(200).json({message:"success", review});
 }
+
+export const deleteReview = async (req,res,next)=>{
+    const {reviewId} = req.params;
+    const review = await reviewModel.findOneAndDelete({
+         _id:reviewId,
+        createdBy:req.id
+    });
+     if(!review){
+        return next(new AppError("review not found",404));
+    }
+    return res.status(200).json({message:"success"});
+}

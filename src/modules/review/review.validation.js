@@ -14,3 +14,8 @@ export const updateReviewSchema = joi.object({
     comment: joi.string(),
     rating: joi.number(),
 });
+
+export const deleteReviewSchema = joi.object({
+     productId: joi.string().required(),
+     reviewId: joi.string().required(),
+});
