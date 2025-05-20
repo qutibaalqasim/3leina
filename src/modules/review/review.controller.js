@@ -26,3 +26,20 @@ export const addReview = async (req,res,next)=>{
     }
     return res.status(201).json({message:"success", review});
 }
+
+export const updateReview = async (req,res,next)=>{
+    const {reviewId} = req.params;
+    const {comment, rating} = req.body;
+    const review = await reviewModel.findOne({
+        _id:reviewId,
+        createdBy:req.id
+    });
+
+    if(!review){
+        return next(new AppError("review not found",404));
+    }
+    if (comment !== undefined) review.comment = comment;
+    if (rating !== undefined) review.rating = rating;
+    await review.save();
+    return res.status(200).json({message:"success", review});
+}
