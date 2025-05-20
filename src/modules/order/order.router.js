@@ -17,7 +17,10 @@ router.get('/', auth(['super_Admin','admin', 'delivery_Agent' , 'user']), asyncH
 router.get('/confirm', auth(['delivery_Agent']), asyncHandler(controller.getConfirmedOrders));
 // url/order/:status
 router.get('/:status', auth(['super_Admin']), validation(schema.getOrderByStatusSchema), asyncHandler(controller.getOrderByStatus));
-
+// url/order/:orderId
+router.patch('/:orderId', auth(['super_Admin','admin', 'delivery_Agent' , 'user']), validation(schema.cancelledOrderSchema), asyncHandler(controller.cancelledOrder));
+// url/order/changeStatus/:orderId
+router.patch('/changeStatus/:orderId', auth(['super_Admin']), validation(schema.changeStatusSchema), asyncHandler(controller.changeStatus));
 
 
 

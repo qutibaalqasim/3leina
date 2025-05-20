@@ -96,3 +96,53 @@ export const getConfirmedOrders = async (req,res,next)=>{
     const orders = await orderModel.find({status:"confirmed"});
     return res.status(200).json({message:"success", orders});
 }
+
+export const cancelledOrder = async(req,res,next)=>{
+    const {orderId} = req.params;
+    const order = await orderModel.findById(orderId);
+    if(!order){
+        return next (new AppError("order not found",404));
+    }
+    if(order.status == 'confirmed' || order.status == 'onWay' || order.status == 'delivered'){
+        return next(new AppError("can't cancelled this order" , 400));
+    }
+    if(order.userId != req.id){
+        return next(new AppError("not authorized to cancelled this order", 400));
+    }
+    order.status = req.body.status;
+    order.updatedBy = req.id;
+     if(req.body.status == 'cancelled'){
+          if(req.body.coupon){
+            await couponModel.updateOne({_id:req.body.coupon._id},{
+                $pull:{
+                    usedBy:req.id
+                    }
+            });
+                            }
+    }
+    await order.save();
+    return res.status(200).json({message:"success", order});
+
+}
+
+export const changeStatus = async (req,res,next)=>{
+    const {orderId} = req.params;
+    const order = await orderModel.findById(orderId);
+    if(!order){
+        return next(new AppError("order not found",404));
+    }
+    order.status = req.body.status;
+    order.updatedBy = req.id;
+    const cart = await cartModel.findById(req.id);
+    if(req.body.status == 'confirmed'){
+        for(const product of cart.products){
+       await productModel.updateOne({_id:product.productId},{
+        $inc:{
+            stock:-product.quantity
+        }
+       });
+    }
+    }
+    await order.save();
+    return res.status(200).json({message:"success", order});
+}
