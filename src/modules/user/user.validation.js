@@ -27,3 +27,8 @@ export const changeUserStatusSchema = joi.object({
     id: joi.string().required(),
     status: joi.string().valid('active', 'inactive').required(),
 });
+
+export const ratingUserSchema = joi.object({
+    userId: joi.string().required(),
+    rating: joi.number().min(1).max(5).required(),
+});

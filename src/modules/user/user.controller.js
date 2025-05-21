@@ -110,3 +110,17 @@ export const deleteUser = async (req,res,next)=>{
     }
     return res.status(200).json({ message: "success"});
 }
+// this function is used to rating any user by others.
+export const ratingUser = async(req,res,next)=>{
+    const {userId} = req.params;
+    const {rating} = req.body;
+    const user = await userModel.findByIdAndUpdate(
+        userId,
+        {rating},
+        {new:true}
+    );
+    if(!user){
+        return next(new AppError("user not found",404));
+    }
+    return res.status(200).json({message:"success", user});
+}

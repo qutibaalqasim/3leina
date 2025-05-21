@@ -27,5 +27,8 @@ router.put('/image/:id',auth(['super_Admin','admin', 'delivery_Agent' , 'user'])
 ,validation(schema.updateUserImageSchema), asyncHandler(controller.updateUserImage));
 // url/users/:id
 router.delete('/:id',auth(['super_Admin']),validation(schema.deleteUserSchema), asyncHandler(controller.deleteUser));
+// url/users/rating/:userId
+router.patch('/rating/:userId', auth(['super_Admin','admin', 'delivery_Agent' , 'user']), validation(schema.ratingUserSchema), asyncHandler(controller.ratingUser));
+
 
 export default router;
