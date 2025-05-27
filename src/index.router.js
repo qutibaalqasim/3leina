@@ -14,6 +14,7 @@ import suggestionRouter from './modules/suggestion/suggestion.router.js';
 import orderRouter from "./modules/order/order.router.js";
 //import paymentRouter from "./modules/payment/payment.router.js";
 import chatRouter from './modules/chat/chat.router.js';
+import searchRouter from './modules/search/search.router.js';
 
 const initApp = async (app , express)=>{
     app.use(express.json());
@@ -53,6 +54,8 @@ const initApp = async (app , express)=>{
    // app.use('/payment', paymentRouter);
     // url/chat
     app.use('/chat', chatRouter);
+    // url/search
+    app.use('/search', searchRouter);
 
     app.use((err,req,res,next)=>{
         return res.status(err.statusCode).json({message:err.message});
