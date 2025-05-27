@@ -12,6 +12,8 @@ import cartRouter from './modules/cart/cart.router.js';
 import favoriteRouter from './modules/favorite/favorite.router.js';
 import suggestionRouter from './modules/suggestion/suggestion.router.js';
 import orderRouter from "./modules/order/order.router.js";
+import paymentRouter from "./modules/payment/payment.router.js";
+import chatRouter from './modules/chat/chat.router.js';
 
 const initApp = async (app , express)=>{
     app.use(express.json());
@@ -47,6 +49,11 @@ const initApp = async (app , express)=>{
     app.use('/suggestion', suggestionRouter);
     // url/order
     app.use('/order', orderRouter);
+    // url/payment
+    app.use('/payment', paymentRouter);
+    // url/chat
+    app.use('/chat', chatRouter);
+
     app.use((err,req,res,next)=>{
         return res.status(err.statusCode).json({message:err.message});
     });
