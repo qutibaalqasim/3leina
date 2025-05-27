@@ -5,7 +5,7 @@ import { asyncHandler } from "../../utils/catchError.js";
 import { auth } from "../../middleware/auth.js";
 
 
-
+/*
 const router = Router();
 // url/payment
 router.post('/',auth(['super_Admin','admin', 'delivery_Agent' , 'user']), asyncHandler(controller.initiatePayment));
@@ -20,4 +20,4 @@ router.get('/:id', auth(['super_Admin','admin', 'delivery_Agent' , 'user']), asy
 
 
 
-export default router;
+export default router;*/

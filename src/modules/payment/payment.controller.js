@@ -3,7 +3,7 @@ import { AppError } from "../../utils/AppError.js";
 import { stripe } from "./stripe.js";
 
 
-
+/*
 export const initiatePayment = async (req, res, next) => {
     const {amount , currency = 'USD', paymentMethodId , method = 'card'} = req.body;
     const intent = await stripe.paymentIntents.create({
@@ -65,4 +65,4 @@ export const updateStatus = async (req, res, next) => {
         req.headers['stripe-signature'],
         process.env.STRIPE_WEBHOOK_SECRET
     );
-}
+}*/
