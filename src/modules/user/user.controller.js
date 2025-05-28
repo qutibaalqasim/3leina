@@ -2,10 +2,15 @@ import userModel from "../../../DB/models/user.model.js";
 import { AppError } from "../../utils/AppError.js";
 import cloudinary from "../../utils/cloudinary.js";
 import bcrypt from 'bcryptjs';
+import paginate from "../../utils/paginate.js";
 
 
 export const getAllUsers = async (req, res, next) => {
-    const users = await userModel.find({role: 'user'});
+    const users = await paginate(userModel,{role: 'user'},{
+        page: req.query.page,
+        limit: req.query.limit,
+        select: "userName email userImage status role createdAt updatedAt"
+    });
     if (!users) {
         return next(new AppError("No users found", 404 ));
     }
@@ -13,7 +18,11 @@ export const getAllUsers = async (req, res, next) => {
 }
 
 export const getActiveUsers = async (req, res, next) => {
-    const users = await userModel.find({role: 'user', status: 'active'});
+    const users = await paginate(userModel,{role: 'user', status: 'active'},{
+        page: req.query.page,
+        limit: req.query.limit,
+        select: "userName email userImage status role createdAt updatedAt"
+    });
     if (!users) {
         return next(new AppError("No users found", 404 ));
     }
@@ -21,7 +30,11 @@ export const getActiveUsers = async (req, res, next) => {
 }
 
 export const getInactiveUsers = async (req, res, next) => {
-    const users = await userModel.find({role: 'user', status: 'inactive'});
+    const users = await paginate(userModel,{role: 'user', status: 'inactive'},{
+        page: req.query.page,
+        limit: req.query.limit,
+        select: "userName email userImage status role createdAt updatedAt"
+    });
     if (!users) {
         return next(new AppError("No users found", 404 ));
     }
