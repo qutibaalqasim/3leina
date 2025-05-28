@@ -3,6 +3,7 @@ import subCategoryModel from "../../../DB/models/subCategory.model.js";
 import { AppError } from "../../utils/AppError.js";
 import cloudinary from "../../utils/cloudinary.js";
 import productModel from "../../../DB/models/product.model.js";
+import paginate from "../../utils/paginate.js";
 
 
 
@@ -47,24 +48,39 @@ export const createProduct = async (req, res, next) => {
 }
 
 export const getAllProducts = async (req,res,next)=>{
-    const products = await productModel.find({}).select('name description status stock mainImage');
+    const products = await paginate(productModel,{},{
+        page: req.query.page,
+        limit: req.query.limit,
+        select: 'name description status stock mainImage',
+    });
     return res.status(200).json({message: "success", products});
 }
 
 export const getAllActive = async (req,res,next)=>{
-    const products = await productModel.find({status: "active"}).select('name description status stock mainImage');
+    const products = await paginate(productModel,{status: "active"},{
+        page: req.query.page,
+        limit: req.query.limit,
+        select: 'name description status stock mainImage',
+    });
     return res.status(200).json({message: "success", products});
 }
 
 export const getAllInActive = async (req,res,next)=>{
-    const products = await productModel.find({status: "inactive"}).select('name description status stock mainImage');
+    const products = await paginate(productModel,{status: "inactive"},{
+        page: req.query.page,
+        limit: req.query.limit,
+        select: 'name description status stock mainImage',
+    });
     return res.status(200).json({message: "success", products});
 }
 
 // get all products by subCategoryId and status active for all users
 export const getActiveBySubCategoryId = async (req,res,next)=>{
     const {subCategoryId} = req.params;
-    const products = await productModel.find({status: "active", subCategoryId});
+    const products = await paginate(productModel,{status: "active", subCategoryId},{
+        page: req.query.page,
+        limit: req.query.limit,
+    });
     return res.status(200).json({message: "success", products});
 }
 
@@ -78,7 +94,11 @@ export const getInActiveBySubCategoryId = async (req,res,next)=>{
         return next(new AppError('You are not authorized to access this category',403));
     }
 
-    const products = await productModel.find({status: "inactive", subCategoryId}).select('name description status stock mainImage');
+    const products = await paginate(productModel,{status: "inactive", subCategoryId},{
+        page: req.query.page,
+        limit: req.query.limit,
+        select: 'name description status stock mainImage',
+    });
     return res.status(200).json({message: "success", products});
 }
 // get product details by productId for all users

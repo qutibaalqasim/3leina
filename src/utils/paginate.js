@@ -5,8 +5,12 @@ const paginate = async (model, query = {}, options = {})=>{
     const limit = parseInt(options.limit) || 10;
     const skip = (page - 1) * limit;
 
+    let dbQuery = model.find(query).skip(skip).limit(limit);
+    if(options.select) {
+        dbQuery = dbQuery.select(options.select);
+    }
     const [data , total] = await Promise.all([
-        model.find(query).skip(skip).limit(limit),
+        dbQuery,
         model.countDocuments(query)
     ]);
 
