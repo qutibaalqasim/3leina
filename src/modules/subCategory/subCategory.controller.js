@@ -4,6 +4,7 @@ import { AppError } from "../../utils/AppError.js";
 import subCategoryModel from "../../../DB/models/subCategory.model.js";
 import cloudinary from "../../utils/cloudinary.js";
 import productModel from "../../../DB/models/product.model.js";
+import paginate from "../../utils/paginate.js";
 
 
 
@@ -26,7 +27,11 @@ export const createSubCategory = async (req, res, next) => {
 }
 
 export const getAllSubCategory = async (req, res, next) => {
-    const subCategories = await subCategoryModel.find({});
+    const subCategories = await paginate(subCategoryModel,{},{
+        page: req.query.page,
+        limit: req.query.limit,
+        select: 'name image status categoryId createdBy updatedBy createdAt updatedAt'
+    });
     if (!subCategories) {
         return next(new AppError('Failed to get subCategories', 404));
     }
@@ -42,7 +47,10 @@ export const getSubCategoriesByCategoryId = async (req, res, next) => {
     if(!category.admins.includes(req.id) && req.role != 'super_Admin'){
         return next(new AppError('You are not authorized to create subCategory on this category',403));
     }
-    const subCategories = await subCategoryModel.find({categoryId});
+    const subCategories = await paginate(subCategoryModel,{categoryId},{
+        page: req.query.page,
+        limit: req.query.limit
+    });
     if (!subCategories) {
         return next(new AppError('Failed to get subCategories', 404));
     }
@@ -50,12 +58,20 @@ export const getSubCategoriesByCategoryId = async (req, res, next) => {
 }
 
 export const getAllActive = async (req, res, next) => {
-    const subCategories = await subCategoryModel.find({status: 'active'});
+    const subCategories = await paginate(subCategoryModel,{status: 'active'},{
+        page: req.query.page,
+        limit: req.query.limit,
+        select: 'name image status categoryId createdBy updatedBy createdAt updatedAt'
+    });
     return res.status(200).json({ message: 'success', subCategories });
 }
 
 export const getAllInactive = async (req, res, next) => {
-    const subCategories = await subCategoryModel.find({status: 'inactive'});
+    const subCategories = await paginate(subCategoryModel,{status: 'inactive'},{
+        page: req.query.page,
+        limit: req.query.limit,
+        select: 'name image status categoryId createdBy updatedBy createdAt updatedAt'
+    });
     return res.status(200).json({ message: 'success', subCategories });
 }  
 
@@ -68,13 +84,21 @@ export const getAllActiveByCategoryId = async (req, res, next) => {
     if(!category.admins.includes(req.id) && req.role != 'super_Admin'){
         return next(new AppError('You are not authorized to create subCategory on this category',403));
     }
-    const subCategories = await subCategoryModel.find({categoryId, status: 'active'});
+    const subCategories = await paginate(subCategoryModel,{categoryId, status: 'active'},{
+        page: req.query.page,
+        limit: req.query.limit,
+        select: 'name image status categoryId createdBy updatedBy createdAt updatedAt'
+    });
     return res.status(200).json({ message: 'success', subCategories });
 }
 
 export const getAllInActiveByCategoryId = async (req, res, next) => {
     const {categoryId} = req.params;
-    const subCategories = await subCategoryModel.find({categoryId, status: 'inactive'});
+    const subCategories = await paginate(subCategoryModel,{categoryId, status: 'inactive'},{
+        page: req.query.page,
+        limit: req.query.limit,
+        select: 'name image status categoryId createdBy updatedBy createdAt updatedAt'
+    });
     return res.status(200).json({ message: 'success', subCategories });
 }
 
