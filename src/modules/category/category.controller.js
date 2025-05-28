@@ -4,6 +4,7 @@ import { AppError } from '../../utils/AppError.js';
 import cloudinary from '../../utils/cloudinary.js';
 import subCategoryModel from '../../../DB/models/subCategory.model.js';
 import productModel from '../../../DB/models/product.model.js';
+import paginate from '../../utils/paginate.js';
 
 
 export const createCategory = async (req, res, next) => {
@@ -18,7 +19,10 @@ export const createCategory = async (req, res, next) => {
 }
 
 export const getAllCategories = async(req,res,next)=>{
-    const categories = await categoryModel.find({});
+    const categories = await paginate(categoryModel,{},{
+        page: req.query.page,
+        limit: req.query.limit
+    });
     if (!categories) {
         return next(new AppError('Failed to get categories',404));
     }
@@ -26,7 +30,10 @@ export const getAllCategories = async(req,res,next)=>{
 }
 
 export const getActive = async (req,res,next)=>{
-    const categories = await categoryModel.find({status: 'active'});
+    const categories = await paginate(categoryModel,{status: 'active'},{
+        page: req.query.page,
+        limit: req.query.limit
+    });
     if (!categories) {
         return next(new AppError('Failed to get categories',404));
     }
@@ -34,7 +41,10 @@ export const getActive = async (req,res,next)=>{
 }
 
 export const getInactive = async (req,res,next)=>{
-    const categories = await categoryModel.find({status: 'inactive'});
+    const categories = await paginate(categoryModel,{status: 'inactive'},{
+        page: req.query.page,
+        limit: req.query.limit
+    });
     if (!categories) {
         return next(new AppError('Failed to get categories',404));
     }
