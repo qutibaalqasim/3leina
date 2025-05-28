@@ -4,6 +4,7 @@ import orderModel from "../../../DB/models/order.model.js";
 import productModel from "../../../DB/models/product.model.js";
 import userModel from "../../../DB/models/user.model.js";
 import { AppError } from "../../utils/AppError.js";
+import paginate from "../../utils/paginate.js";
 
 
 export const createOrder = async (req, res, next)=>{
@@ -77,23 +78,35 @@ export const createOrder = async (req, res, next)=>{
 }
 
 export const getAllOrders = async (req,res,next)=>{
-    const orders = await orderModel.find({});
+    const orders = await paginate(orderModel,{},{
+        page: req.query.page,
+        limit: req.query.limit
+    });
     return res.status(200).json({message:"success", orders});
 }
 
 export const getUserOrders = async (req,res,next)=>{
-    const orders = await orderModel.find({userId:req.id});
+    const orders = await paginate(orderModel,{userId:req.id},{
+        page: req.query.page,
+        limit: req.query.limit
+    });
     return res.status(200).json({message:"success", orders});
 }
 
 export const getOrderByStatus = async (req,res,next)=>{
     const {status} = req.params;
-    const orders = await orderModel.find({status});
+    const orders = await paginate(orderModel,{status},{
+        page: req.query.page,
+        limit: req.query.limit
+    });
     return res.status(200).json({message:"success", orders});
 }
 
 export const getConfirmedOrders = async (req,res,next)=>{
-    const orders = await orderModel.find({status:"confirmed"});
+    const orders = await paginate(orderModel,{status:"confirmed"},{
+        page: req.query.page,
+        limit: req.query.limit
+    });
     return res.status(200).json({message:"success", orders});
 }
 
