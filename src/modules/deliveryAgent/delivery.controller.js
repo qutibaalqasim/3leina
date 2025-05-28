@@ -1,5 +1,6 @@
 import userModel from "../../../DB/models/user.model.js"
 import { AppError } from "../../utils/AppError.js";
+import paginate from "../../utils/paginate.js";
 
 
 
@@ -14,7 +15,10 @@ export const createDelivery = async(req,res,next)=>{
 }
 
 export const getAllDelivery = async (req, res,next) => {
-    const delivery = await userModel.find({role: "delivery_Agent"});
+    const delivery = await paginate(userModel,{role: "delivery_Agent"},{
+        page: req.query.page,
+        limit: req.query.limit,
+    });
     if (!delivery) {
         return next(new AppError("No delivery agents found", { cause: 404 }));
     }
@@ -22,7 +26,10 @@ export const getAllDelivery = async (req, res,next) => {
 }
 
 export const getActive = async (req,res,next)=>{
-    const delivery = await userModel.find({role: "delivery_Agent", status: "active"});
+    const delivery = await paginate(userModel,{role: "delivery_Agent", status: "active"},{
+        page: req.query.page,
+        limit: req.query.limit,
+    });
     if (!delivery) {
         return next(new AppError("No active delivery agents found", { cause: 404 }));
     }
@@ -30,7 +37,10 @@ export const getActive = async (req,res,next)=>{
 }
 
 export const getInactive = async (req,res,next)=>{
-    const delivery = await userModel.find({role: "delivery_Agent", status: "inactive"});
+    const delivery = await paginate(userModel,{role: "delivery_Agent", status: "inactive"},{
+        page: req.query.page,
+        limit: req.query.limit,
+    });
     if (!delivery) {
         return next(new AppError("No inactive delivery agents found",  404 ));
     }
