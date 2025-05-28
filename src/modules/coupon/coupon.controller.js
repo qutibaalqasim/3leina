@@ -1,5 +1,6 @@
 import couponModel from "../../../DB/models/coupon.model.js";
 import { AppError } from "../../utils/AppError.js";
+import paginate from "../../utils/paginate.js";
 
 
 export const create = async (req, res, next) => {
@@ -19,7 +20,10 @@ export const create = async (req, res, next) => {
 }
 
 export const getAll = async (req, res) => {
-    const coupons = await couponModel.find({});
+    const coupons = await paginate(couponModel,{},{
+        page: req.query.page,
+        limit: req.query.limit,
+    });
     if(!coupons || coupons.length === 0) {
         return next(new AppError('No coupons found', 404));
     }
@@ -27,7 +31,10 @@ export const getAll = async (req, res) => {
 }
 
 export const getActive = async (req,res,next)=>{
-    const coupons = await couponModel.find({status: 'active'});
+    const coupons = await paginate(couponModel,{status: 'active'},{
+        page: req.query.page,
+        limit: req.query.limit,
+    });
     if(!coupons || coupons.length === 0) {
         return next(new AppError('No active coupons found', 404));
     }
@@ -35,7 +42,10 @@ export const getActive = async (req,res,next)=>{
 }
 
 export const getInactive = async (req,res,next)=>{
-    const coupons = await couponModel.find({status: 'inactive'});
+    const coupons = await paginate(couponModel,{status: 'inactive'},{
+        page: req.query.page,
+        limit: req.query.limit,
+    });
     if(!coupons || coupons.length === 0) {
         return next(new AppError('No inactive coupons found', 404));
     }
