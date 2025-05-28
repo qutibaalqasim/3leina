@@ -1,6 +1,7 @@
 import categoryModel from "../../../DB/models/category.model.js";
 import userModel from "../../../DB/models/user.model.js";
 import { AppError } from "../../utils/AppError.js";
+import paginate from "../../utils/paginate.js";
 
 
 
@@ -19,7 +20,10 @@ export const createAdmin = async (req, res, next) => {
 }
 
 export const getAllAdmins = async (req, res, next) => {
-    const admins = await userModel.find({role: 'admin'});
+    const admins = await paginate(userModel,{role: 'admin'},{
+        page: req.query.page,
+        limit: req.query.limit,
+    });
     if (!admins) {
         return next(new AppError('Failed to get admins', 404));
     }
@@ -27,7 +31,10 @@ export const getAllAdmins = async (req, res, next) => {
 }
 
 export const getActive = async (req, res, next) => {
-    const admins = await userModel.find({role: 'admin', status: 'active'});
+    const admins = await paginate(userModel,{role: 'admin', status: 'active'},{
+        page: req.query.page,
+        limit: req.query.limit,
+    });
     if (!admins) {
         return next(new AppError('Failed to get admins', 404));
     }
@@ -35,7 +42,10 @@ export const getActive = async (req, res, next) => {
 }
 
 export const getInactive = async (req, res, next) => {
-    const admins = await userModel.find({role: 'admin', status: 'inactive'});
+    const admins = await paginate(userModel,{role: 'admin', status: 'inactive'},{
+        page: req.query.page,
+        limit: req.query.limit,
+    });
     if (!admins) {
         return next(new AppError('Failed to get admins', 404));
     }
