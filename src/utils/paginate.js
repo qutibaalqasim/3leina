@@ -1,0 +1,28 @@
+
+
+const paginate = async (model, query = {}, options = {})=>{
+    const page = parseInt(options.page) || 1;
+    const limit = parseInt(options.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const [data , total] = await Promise.all([
+        model.find(query).skip(skip).limit(limit),
+        model.countDocuments(query)
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+    return {
+        data,
+        pagination:{
+        total,
+        page,
+        limit,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1
+        }
+    };
+}
+
+
+export default paginate;
